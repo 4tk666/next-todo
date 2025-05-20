@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-      <main>デプロイ済み</main>
+      <main>デプロイしたよ</main>
     </div>
   )
 }
