@@ -13,7 +13,6 @@ const eslintConfig = [
   ...compat.extends(
     'next/core-web-vitals',
     'next/typescript',
-    'eslint-config-tailwindcss',
     'prettier' // Prettierとの競合を避けるため、最後に追加
   ),
 ];
