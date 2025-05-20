@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-      <main>デプロイ再テスト</main>
+      <main>デプロイ再再テスト</main>
     </div>
   )
 }
