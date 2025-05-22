@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { signInAction } from './actions'
+import Link from 'next/link'
 
 export default function SignInPage() {
   const [isPending, startTransition] = useTransition()
@@ -33,15 +34,15 @@ export default function SignInPage() {
                 htmlFor="username"
                 className="block text-sm font-medium text-gray-700"
               >
-                ユーザー名
+                メールアドレス
               </label>
               <input
                 id="username"
                 name="username"
-                type="text"
+                type="email"
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border"
-                placeholder="ユーザー名を入力"
+                placeholder="メールアドレスを入力"
               />
             </div>
             <div>
@@ -66,10 +67,20 @@ export default function SignInPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-300"
+              className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-300"
             >
               サインイン
             </button>
+          </div>
+
+          <div className="mt-4 text-center text-sm text-gray-600">
+            アカウントをお持ちでないですか？{' '}
+            <Link
+              href="/signUp"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              新規登録
+            </Link>
           </div>
         </form>
       </div>
