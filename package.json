@@ -4,14 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "biome lint .",
-    "format": "biome format ."
+    "format": "biome format .",
+    "studio": "prisma studio",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.9.1",
+    "@prisma/client": "^6.8.2",
     "next": "15.3.2",
     "next-auth": "^5.0.0-beta.28",
+    "prisma": "^6.8.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
