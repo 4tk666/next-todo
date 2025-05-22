@@ -21,6 +21,11 @@ jobs:
       - name: Install dependencies
         run: yarn install # 依存関係をインストール
 
+      - name: Run database migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
       - name: Build Next.js project
         run: yarn build # ビルドする
 
