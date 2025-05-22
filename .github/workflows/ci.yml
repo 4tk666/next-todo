@@ -24,5 +24,8 @@ jobs:
       - name: Run Biome lint
         run: yarn lint
 
+      - name: Run tests
+        run: yarn test
+
       - name: Build Next.js project
         run: yarn build
