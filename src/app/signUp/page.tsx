@@ -1,5 +1,6 @@
 'use client'
 
+import type { ActionState } from '@/types/form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
@@ -9,19 +10,11 @@ export default function SignUpPage() {
   const router = useRouter()
 
   const [state, action, isPending] = useActionState(
-    async (
-      state: {
-        error?: string
-      } | undefined,
-      formData: FormData,
-    ) => {
-      try {
-        await signUpAction(state, formData)
-        router.push('/')
-      } catch (error) {
-        console.error(error)
-        return { error: '登録中にエラーが発生しました' }
-      }
+    async (state: ActionState | undefined, formData: FormData) => {
+      const result = await signUpAction(state, formData)
+      if (result.success) router.push('/')
+
+      return result
     },
     undefined,
   )
@@ -54,10 +47,17 @@ export default function SignUpPage() {
                 id="name"
                 name="name"
                 type="text"
-                required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border"
                 placeholder="お名前を入力"
+                defaultValue={state?.values?.name}
               />
+              {state?.formError?.name && (
+                <div className="mt-1 text-sm text-red-600">
+                  {state.formError.name.map((error) => (
+                    <p key={error}>{error}</p>
+                  ))}
+                </div>
+              )}
             </div>
             <div>
               <label
@@ -70,10 +70,17 @@ export default function SignUpPage() {
                 id="email"
                 name="email"
                 type="email"
-                required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border"
                 placeholder="メールアドレスを入力"
+                defaultValue={state?.values?.email}
               />
+              {state?.formError?.email && (
+                <div className="mt-1 text-sm text-red-600">
+                  {state.formError.email.map((error) => (
+                    <p key={error}>{error}</p>
+                  ))}
+                </div>
+              )}
             </div>
             <div>
               <label
@@ -86,10 +93,17 @@ export default function SignUpPage() {
                 id="password"
                 name="password"
                 type="password"
-                required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border"
                 placeholder="パスワードを入力"
+                defaultValue={state?.values?.password}
               />
+              {state?.formError?.password && (
+                <div className="mt-1 text-sm text-red-600">
+                  {state.formError.password.map((error) => (
+                    <p key={error}>{error}</p>
+                  ))}
+                </div>
+              )}
             </div>
             <div>
               <label
@@ -102,10 +116,17 @@ export default function SignUpPage() {
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
-                required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border"
                 placeholder="パスワードを再入力"
+                defaultValue={state?.values?.confirmPassword}
               />
+              {state?.formError?.confirmPassword && (
+                <div className="mt-1 text-sm text-red-600">
+                  {state.formError.confirmPassword.map((error) => (
+                    <p key={error}>{error}</p>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
