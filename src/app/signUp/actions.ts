@@ -3,43 +3,54 @@
 import { signIn } from '@/auth'
 import { hashPassword } from '@/lib/auth-utils'
 import { prisma } from '@/lib/prisma'
-
-type ActionState = {
-  error?: string
-}
+import type { ActionState } from '@/types/form'
+import { signUpSchema } from './schema'
 
 export async function signUpAction(
   state: ActionState | undefined,
   formData: FormData,
 ) {
-  const name = formData.get('name') as string
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const confirmPassword = formData.get('confirmPassword') as string
+  // 入力値を保持
+  const values = {
+    name: formData.get('name') as string,
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+    confirmPassword: formData.get('confirmPassword') as string,
+  }
 
-  // パスワードの一致確認
-  if (password !== confirmPassword) {
-    return { error: 'パスワードと確認用パスワードが一致しません' }
+  // zodでバリデーション
+  const validationResult = signUpSchema.safeParse(values)
+
+  if (!validationResult.success) {
+    const errors = validationResult.error.flatten().fieldErrors
+    return {
+      error: 'バリデーションエラーが発生しました',
+      formError: errors,
+      values, // 入力値を返す
+    }
   }
 
   try {
     // ユーザーが既に存在するか確認
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { email: values.email },
     })
 
     if (existingUser) {
-      return { error: 'このメールアドレスは既に登録されています' }
+      return {
+        error: 'このメールアドレスは既に登録されています',
+        values, // 入力値を返す
+      }
     }
 
     // パスワードをハッシュ化
-    const hashedPassword = await hashPassword(password)
+    const hashedPassword = await hashPassword(values.password)
 
     // 新規ユーザーの作成
     const user = await prisma.user.create({
       data: {
-        name,
-        email,
+        name: values.name,
+        email: values.email,
         password: hashedPassword,
       },
     })
@@ -47,17 +58,23 @@ export async function signUpAction(
     // 元のパスワード（平文）を使用してサインイン
     const result = await signIn('credentials', {
       username: user.email,
-      password: password, // ハッシュ化前のパスワードを使用
+      password: values.password, // ハッシュ化前のパスワードを使用
       redirect: false,
     })
 
     // サインインの結果を確認
     if (result?.error) {
-      return { error: 'サインインに失敗しました' }
+      return {
+        error: 'サインインに失敗しました',
+        values, // 入力値を返す
+      }
     }
 
     return { success: true }
   } catch (error) {
-    return { error: '登録中にエラーが発生しました' }
+    return {
+      error: '登録中にエラーが発生しました',
+      values, // 入力値を返す
+    }
   }
 }
