@@ -53,7 +53,7 @@ export default function SignUpPage() {
                 placeholder="お名前を入力"
                 defaultValue={state?.values?.name}
               />
-              <FormError errors={state?.formError?.name} />
+              <FormError errors={state?.formError?.name} id="name" />
             </div>
             <div>
               <label
@@ -70,7 +70,7 @@ export default function SignUpPage() {
                 placeholder="メールアドレスを入力"
                 defaultValue={state?.values?.email}
               />
-              <FormError errors={state?.formError?.email} />
+              <FormError errors={state?.formError?.email} id="email" />
             </div>
             <div>
               <label
@@ -87,7 +87,7 @@ export default function SignUpPage() {
                 placeholder="パスワードを入力"
                 defaultValue={state?.values?.password}
               />
-              <FormError errors={state?.formError?.password} />
+              <FormError errors={state?.formError?.password} id="password" />
             </div>
             <div>
               <label
@@ -104,7 +104,10 @@ export default function SignUpPage() {
                 placeholder="パスワードを再入力"
                 defaultValue={state?.values?.confirmPassword}
               />
-              <FormError errors={state?.formError?.confirmPassword} />
+              <FormError
+                errors={state?.formError?.confirmPassword}
+                id="confirmPassword"
+              />
             </div>
           </div>
 
