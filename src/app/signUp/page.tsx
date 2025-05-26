@@ -1,5 +1,7 @@
 'use client'
 
+import { Button } from '@/components/button'
+import { FormError } from '@/components/form-error'
 import type { ActionState } from '@/types/form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -51,13 +53,7 @@ export default function SignUpPage() {
                 placeholder="お名前を入力"
                 defaultValue={state?.values?.name}
               />
-              {state?.formError?.name && (
-                <div className="mt-1 text-sm text-red-600">
-                  {state.formError.name.map((error) => (
-                    <p key={error}>{error}</p>
-                  ))}
-                </div>
-              )}
+              <FormError errors={state?.formError?.name} />
             </div>
             <div>
               <label
@@ -74,13 +70,7 @@ export default function SignUpPage() {
                 placeholder="メールアドレスを入力"
                 defaultValue={state?.values?.email}
               />
-              {state?.formError?.email && (
-                <div className="mt-1 text-sm text-red-600">
-                  {state.formError.email.map((error) => (
-                    <p key={error}>{error}</p>
-                  ))}
-                </div>
-              )}
+              <FormError errors={state?.formError?.email} />
             </div>
             <div>
               <label
@@ -97,13 +87,7 @@ export default function SignUpPage() {
                 placeholder="パスワードを入力"
                 defaultValue={state?.values?.password}
               />
-              {state?.formError?.password && (
-                <div className="mt-1 text-sm text-red-600">
-                  {state.formError.password.map((error) => (
-                    <p key={error}>{error}</p>
-                  ))}
-                </div>
-              )}
+              <FormError errors={state?.formError?.password} />
             </div>
             <div>
               <label
@@ -120,24 +104,14 @@ export default function SignUpPage() {
                 placeholder="パスワードを再入力"
                 defaultValue={state?.values?.confirmPassword}
               />
-              {state?.formError?.confirmPassword && (
-                <div className="mt-1 text-sm text-red-600">
-                  {state.formError.confirmPassword.map((error) => (
-                    <p key={error}>{error}</p>
-                  ))}
-                </div>
-              )}
+              <FormError errors={state?.formError?.confirmPassword} />
             </div>
           </div>
 
           <div>
-            <button
-              type="submit"
-              disabled={isPending}
-              className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-gray-300"
-            >
+            <Button type="submit" disabled={isPending}>
               {isPending ? '処理中...' : 'アカウント作成'}
-            </button>
+            </Button>
           </div>
 
           <div className="text-center text-sm text-gray-600">
