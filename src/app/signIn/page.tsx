@@ -5,7 +5,7 @@ import { FormField } from '@/components/form-field'
 import type { ActionState } from '@/types/form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useActionState} from 'react'
+import { useActionState } from 'react'
 import { signInAction } from './actions'
 
 export default function SignInPage() {

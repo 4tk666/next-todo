@@ -1,20 +1,18 @@
-'use client';
+'use client'
 
 type InputProps = {
-  id: string;
-  name?: string;
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
-  className?: string;
-  placeholder?: string;
-  defaultValue?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  errors?: string[];
-  required?: boolean;
-  disabled?: boolean;
-  autoComplete?: string;
-};
-
+  id: string
+  name?: string
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search'
+  className?: string
+  placeholder?: string
+  defaultValue?: string
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  errors?: string[]
+  disabled?: boolean
+  autoComplete?: string
+}
 
 export function Input({
   id,
@@ -30,16 +28,18 @@ export function Input({
   autoComplete,
 }: InputProps) {
   // 基本のスタイルクラス
-  const baseClassNames = 
-    'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border';
-  
+  const baseClassNames =
+    'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border'
+
   // エラー時のクラス
-  const errorClassNames = errors && errors.length > 0 
-    ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
-    : '';
-  
+  const errorClassNames =
+    errors && errors.length > 0
+      ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+      : ''
+
   // 最終的なクラス名
-  const finalClassNames = `${baseClassNames} ${errorClassNames} ${className}`.trim();
+  const finalClassNames =
+    `${baseClassNames} ${errorClassNames} ${className}`.trim()
 
   return (
     <input
@@ -56,5 +56,5 @@ export function Input({
       aria-describedby={errors ? `${id}-error` : undefined}
       autoComplete={autoComplete}
     />
-  );
+  )
 }

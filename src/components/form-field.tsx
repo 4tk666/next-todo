@@ -48,7 +48,6 @@ export function FormField({
         value={value}
         onChange={onChange}
         errors={errors}
-        required={required}
         disabled={disabled}
         autoComplete={autoComplete}
       />
