@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { AuthProvider } from '@/components/auth-provider'
+import { Header } from '@/components/header'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,7 +17,12 @@ export default function RootLayout({
     <html lang="ja">
       <body>
         {/* AuthProvider はセッション（ログイン状態）をコンポーネントに共有するために必要 */}
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-grow p-4 sm:p-6 lg:p-8">{children}</main>
+          </div>
+        </AuthProvider>
       </body>
     </html>
   )
