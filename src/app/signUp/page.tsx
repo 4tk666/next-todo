@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/button'
-import { FormError } from '@/components/form-error'
+import { FormField } from '@/components/form-field'
 import type { ActionState } from '@/types/form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -36,79 +36,39 @@ export default function SignUpPage() {
           </div>
         )}
 
-        <form className="mt-8 space-y-6" action={action}>
+        <form className="mt-6 space-y-6" action={action}>
           <div className="space-y-4">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                お名前
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border"
-                placeholder="お名前を入力"
-                defaultValue={state?.values?.name}
-              />
-              <FormError errors={state?.formError?.name} id="name" />
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                メールアドレス
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border"
-                placeholder="メールアドレスを入力"
-                defaultValue={state?.values?.email}
-              />
-              <FormError errors={state?.formError?.email} id="email" />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                パスワード
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border"
-                placeholder="パスワードを入力"
-                defaultValue={state?.values?.password}
-              />
-              <FormError errors={state?.formError?.password} id="password" />
-            </div>
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                パスワード（確認用）
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border"
-                placeholder="パスワードを再入力"
-                defaultValue={state?.values?.confirmPassword}
-              />
-              <FormError
-                errors={state?.formError?.confirmPassword}
-                id="confirmPassword"
-              />
-            </div>
+            <FormField
+              id="name"
+              label="お名前"
+              placeholder="お名前を入力"
+              defaultValue={state?.values?.name}
+              errors={state?.formError?.name}
+            />
+            <FormField
+              id="email"
+              label="メールアドレス"
+              type="email"
+              placeholder="メールアドレスを入力"
+              defaultValue={state?.values?.email}
+              errors={state?.formError?.email}
+            />
+            <FormField
+              id="password"
+              label="パスワード"
+              type="password"
+              placeholder="パスワードを入力"
+              defaultValue={state?.values?.password}
+              errors={state?.formError?.password}
+            />
+            <FormField
+              id="confirmPassword"
+              label="パスワード（確認用）"
+              type="password"
+              placeholder="パスワードを再入力"
+              defaultValue={state?.values?.confirmPassword}
+              errors={state?.formError?.confirmPassword}
+            />
           </div>
 
           <div>
