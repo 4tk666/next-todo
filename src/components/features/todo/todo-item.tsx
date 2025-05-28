@@ -1,6 +1,8 @@
 'use client'
 
 import type { TodoDTO } from '@/lib/dto/todoDto'
+import { FiEdit2 } from 'react-icons/fi'
+import { TodoUpdate } from './todo-update'
 
 type TodoItemProps = {
   todo: TodoDTO
@@ -36,14 +38,11 @@ export function TodoItem({ todo }: TodoItemProps) {
         {new Date(todo.createdAt).toLocaleDateString('ja-JP')}
       </td>
       <td className="p-3 w-12 text-right">
-        <button
-          type="button"
-          className="text-gray-400 hover:text-gray-600 transition-colors p-1 opacity-0 group-hover:opacity-100 text-[10px]"
-          aria-label="タスクを編集"
-          title="タスクを編集"
-        >
-          編集
-        </button>
+        <TodoUpdate todo={todo}>
+          <div className="text-gray-400 hover:text-gray-600 transition-colors p-1 opacity-0 group-hover:opacity-100">
+            <FiEdit2 size={14} />
+          </div>
+        </TodoUpdate>
       </td>
     </>
   )
