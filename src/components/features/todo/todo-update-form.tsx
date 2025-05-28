@@ -75,7 +75,7 @@ export function TodoUpdateForm({
           placeholder="タスクの詳細を入力（任意）"
           rows={5}
           disabled={isPending}
-          defaultValue={state?.values?.description || todo.description || ''}
+          defaultValue={state?.values?.description ?? todo.description ?? ''}
         />
         <FormError
           errors={state?.error?.fields?.description}
