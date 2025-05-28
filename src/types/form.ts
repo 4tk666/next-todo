@@ -4,10 +4,13 @@ export type FormError = {
 }
 
 // Server Actionの戻り値の型定義
-export type ActionState = {
-  error?: string
-  success?: boolean
-  formError?: FormError
+export type ActionState<T = void> = {
+  success: boolean
+  data?: T
+  error?: {
+    message: string
+    fields?: FormError
+  }
   values?: {
     [key: string]: string
   }

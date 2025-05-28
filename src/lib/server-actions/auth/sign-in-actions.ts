@@ -4,10 +4,7 @@ import { signIn } from '@/auth'
 import type { ActionState } from '@/types/form'
 import { signInSchema } from '../../schemas/auth/sign-in-schema'
 
-export async function signInAction(
-  state: ActionState | undefined,
-  formData: FormData,
-) {
+export async function signInAction(formData: FormData): Promise<ActionState> {
   // 入力値を保持
   const values = {
     username: formData.get('username') as string,
@@ -20,8 +17,12 @@ export async function signInAction(
   if (!validationResult.success) {
     const errors = validationResult.error.flatten().fieldErrors
     return {
-      error: 'バリデーションエラーが発生しました',
-      formError: errors,
+      success: false,
+      error: {
+        message: 'バリデーションエラーが発生しました',
+
+        fields: errors,
+      },
       values, // 入力値を返す
     }
   }
@@ -35,7 +36,10 @@ export async function signInAction(
 
     if (result?.error) {
       return {
-        error: 'ユーザー名またはパスワードが正しくありません',
+        success: false,
+        error: {
+          message:'ユーザー名またはパスワードが正しくありません'
+        },
         values, // 入力値を返す（パスワードは消さない）
       }
     }
@@ -46,7 +50,10 @@ export async function signInAction(
   } catch (error) {
     console.error(error)
     return {
-      error: 'エラーが発生しました',
+      success: false,
+      error: {
+        message: 'サインイン中にエラーが発生しました',
+      },
       values, // 入力値を返す
     }
   }
