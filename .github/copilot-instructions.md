@@ -33,6 +33,13 @@
   - アクセシビリティを優先し、キーボードナビゲーションとスクリーンリーダーのサポートを実装します。
   - コンポーネントのスタイルは、Tailwind CSSのユーティリティクラスを使用して記述します。
   - セマンティックなHTML要素を使用し、適切なARIA属性を実装し、キーボードナビゲーションをサポートします。
+  - Tailwindクラスはclsxライブラリを使用して関連するもので整理し、読みやすくグルーピングします。以下の順序でグループ化します：
+    - レイアウト・配置（flex、grid、positionなど）
+    - サイズ・間隔（width、height、padding、marginなど）
+    - ボーダー・装飾（border、rounded、shadowなど）
+    - 色・テキスト（text-color、bg-color、font-sizeなど）
+    - 状態・インタラクション（hover、focus、activeなど）
+    - アニメーション・トランジション（transition、animateなど）
 
 
 ## フォームとバリデーション
