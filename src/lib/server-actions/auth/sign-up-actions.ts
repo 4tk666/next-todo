@@ -1,10 +1,10 @@
 'use server'
 
 import { signIn } from '@/auth'
-import { hashPassword } from '@/lib/auth-utils'
 import { prisma } from '@/lib/prisma'
+import { signUpSchema } from '@/lib/schemas/auth/sign-up-schema'
+import { hashPassword } from '@/lib/utils/auth-utils'
 import type { ActionState } from '@/types/form'
-import { signUpSchema } from './schema'
 
 export async function signUpAction(
   state: ActionState | undefined,

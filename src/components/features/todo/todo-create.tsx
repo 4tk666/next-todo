@@ -1,15 +1,15 @@
 'use client'
 
-import { Button } from '@/components/button'
-import { SideOverlay } from '@/components/side-overlay'
-import { TodoForm } from '@/components/todo-form'
+import { Button } from '@/components/elements/button'
+import { SideOverlay } from '@/components/elements/side-overlay'
+import { TodoForm } from '@/components/features/todo/todo-form'
 import { useState } from 'react'
 
 /**
  * Todoページのクライアント側コンポーネント
  * タスク追加モーダルの状態管理を担当
  */
-export function TodoPageClient() {
+export function TodoCreate() {
   const [isFormOpen, setIsFormOpen] = useState(false)
 
   const openForm = () => setIsFormOpen(true)

@@ -2,7 +2,7 @@
 
 import { signIn } from '@/auth'
 import type { ActionState } from '@/types/form'
-import { signInSchema } from './schema'
+import { signInSchema } from '../../schemas/auth/sign-in-schema'
 
 export async function signInAction(
   state: ActionState | undefined,
@@ -43,7 +43,6 @@ export async function signInAction(
     return {
       success: true,
     }
-
   } catch (error) {
     console.error(error)
     return {

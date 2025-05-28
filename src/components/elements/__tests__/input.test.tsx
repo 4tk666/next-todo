@@ -6,7 +6,7 @@ import { Input } from '../input'
 describe('Input コンポーネント', () => {
   const testId = 'test-input'
   const testPlaceholder = 'テスト入力欄'
-  
+
   it('基本的なプロパティが正しく適用されること', () => {
     render(<Input id={testId} placeholder={testPlaceholder} />)
 
@@ -51,12 +51,12 @@ describe('Input コンポーネント', () => {
   it('onChangeが正しく呼び出されること', async () => {
     const handleChange = vi.fn()
     const user = userEvent.setup()
-    
+
     render(<Input id={testId} onChange={handleChange} />)
 
     const input = screen.getByRole('textbox')
     await user.type(input, 'テスト入力')
-    
+
     expect(handleChange).toHaveBeenCalled()
   })
 
