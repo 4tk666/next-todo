@@ -1,6 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { IoClose } from 'react-icons/io5'
 
 type SideOverlayProps = {
   /** オーバーレイのタイトル */
@@ -49,7 +50,7 @@ export function SideOverlay({
             onClick={onClose}
             aria-label="閉じる"
           >
-            &times;
+            <IoClose size={24} />
           </button>
         </div>
 
