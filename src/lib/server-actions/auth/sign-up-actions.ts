@@ -6,10 +6,7 @@ import { signUpSchema } from '@/lib/schemas/auth/sign-up-schema'
 import { hashPassword } from '@/lib/utils/auth-utils'
 import type { ActionState } from '@/types/form'
 
-export async function signUpAction(
-  state: ActionState | undefined,
-  formData: FormData,
-) {
+export async function signUpAction(formData: FormData): Promise<ActionState> {
   // 入力値を保持
   const values = {
     name: formData.get('name') as string,
@@ -24,8 +21,11 @@ export async function signUpAction(
   if (!validationResult.success) {
     const errors = validationResult.error.flatten().fieldErrors
     return {
-      error: 'バリデーションエラーが発生しました',
-      formError: errors,
+      success: false,
+      error: {
+        message: 'バリデーションエラーが発生しました',
+        fields: errors,
+      },
       values, // 入力値を返す
     }
   }
@@ -38,7 +38,10 @@ export async function signUpAction(
 
     if (existingUser) {
       return {
-        error: 'このメールアドレスは既に登録されています',
+        success: false,
+        error: {
+          message: 'このメールアドレスは既に登録されています',
+        },
         values, // 入力値を返す
       }
     }
@@ -65,15 +68,23 @@ export async function signUpAction(
     // サインインの結果を確認
     if (result?.error) {
       return {
-        error: 'サインインに失敗しました',
+        success: false,
+        error: {
+          message: 'サインインに失敗しました',
+        },
         values, // 入力値を返す
       }
     }
 
-    return { success: true }
+    return {
+      success: true,
+    }
   } catch (error) {
     return {
-      error: '登録中にエラーが発生しました',
+      success: false,
+      error: {
+        message: '登録中にエラーが発生しました',
+      },
       values, // 入力値を返す
     }
   }

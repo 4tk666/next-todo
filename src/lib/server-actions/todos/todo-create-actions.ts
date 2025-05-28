@@ -13,15 +13,16 @@ import { revalidatePath } from 'next/cache'
  * @returns 作成結果
  */
 export async function createTodoAction(
-  prevState: ActionState | undefined,
   formData: FormData,
 ): Promise<ActionState> {
   // セッションチェック
   const session = await auth()
   if (!session?.user?.id) {
     return {
-      error: '認証されていません。再度ログインしてください。',
       success: false,
+      error: {
+        message: '認証されていません。再度ログインしてください。',
+      },
     }
   }
 
@@ -38,7 +39,10 @@ export async function createTodoAction(
     const errors = validationResult.error.flatten().fieldErrors
     return {
       success: false,
-      formError: errors,
+      error: {
+        message: 'バリデーションエラーが発生しました',
+        fields: errors,
+      },
       values,
     }
   }
@@ -63,7 +67,9 @@ export async function createTodoAction(
     console.error('タスク作成エラー:', error)
     return {
       success: false,
-      error: 'タスクの作成に失敗しました。もう一度お試しください。',
+      error: {
+        message: 'タスクの作成に失敗しました。もう一度お試しください。',
+      },
       values,
     }
   }

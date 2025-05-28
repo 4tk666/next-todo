@@ -13,7 +13,7 @@ export default function SignInPage() {
 
   const [state, action, isPending] = useActionState(
     async (state: ActionState | undefined, formData: FormData) => {
-      const result = await signInAction(state, formData)
+      const result = await signInAction(formData)
       if (result.success) router.push('/')
 
       return result
@@ -32,7 +32,7 @@ export default function SignInPage() {
 
         {state?.error && (
           <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {state.error}
+            {state.error.message}
           </div>
         )}
 
@@ -44,7 +44,7 @@ export default function SignInPage() {
               type="email"
               placeholder="メールアドレスを入力"
               defaultValue={state?.values?.username}
-              errors={state?.formError?.username}
+              errors={state?.error?.fields?.username}
               required
             />
             <FormField
@@ -53,7 +53,7 @@ export default function SignInPage() {
               type="password"
               placeholder="パスワードを入力"
               defaultValue={state?.values?.password}
-              errors={state?.formError?.password}
+              errors={state?.error?.fields?.password}
               required
             />
           </div>

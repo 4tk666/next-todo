@@ -13,7 +13,7 @@ export default function SignUpPage() {
 
   const [state, action, isPending] = useActionState(
     async (state: ActionState | undefined, formData: FormData) => {
-      const result = await signUpAction(state, formData)
+      const result = await signUpAction(formData)
       if (result.success) router.push('/')
 
       return result
@@ -32,7 +32,7 @@ export default function SignUpPage() {
 
         {state?.error && (
           <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {state.error}
+            {state.error.message}
           </div>
         )}
 
@@ -43,7 +43,7 @@ export default function SignUpPage() {
               label="お名前"
               placeholder="お名前を入力"
               defaultValue={state?.values?.name}
-              errors={state?.formError?.name}
+              errors={state?.error?.fields?.name}
             />
             <FormField
               id="email"
@@ -51,7 +51,7 @@ export default function SignUpPage() {
               type="email"
               placeholder="メールアドレスを入力"
               defaultValue={state?.values?.email}
-              errors={state?.formError?.email}
+              errors={state?.error?.fields?.email}
             />
             <FormField
               id="password"
@@ -59,7 +59,7 @@ export default function SignUpPage() {
               type="password"
               placeholder="パスワードを入力"
               defaultValue={state?.values?.password}
-              errors={state?.formError?.password}
+              errors={state?.error?.fields?.password}
             />
             <FormField
               id="confirmPassword"
@@ -67,7 +67,7 @@ export default function SignUpPage() {
               type="password"
               placeholder="パスワードを再入力"
               defaultValue={state?.values?.confirmPassword}
-              errors={state?.formError?.confirmPassword}
+              errors={state?.error?.fields?.confirmPassword}
             />
           </div>
 
