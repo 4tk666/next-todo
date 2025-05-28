@@ -5,6 +5,7 @@ import { Textarea } from '@/components/elements/textarea'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { updateTodoAction } from '@/lib/server-actions/todos/todo-update-actions'
 import type { ActionState } from '@/types/form'
+import { clsx } from 'clsx'
 import { useActionState } from 'react'
 import { FormError } from '../../elements/form-error'
 import { Input } from '../../elements/input'
@@ -91,7 +92,11 @@ export function TodoUpdateForm({
           type="button"
           onClick={onCancel}
           disabled={isPending}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 flex-1"
+          className={clsx(
+            'flex-1',
+            'bg-gray-300 hover:bg-gray-400',
+            'text-gray-800',
+          )}
         >
           キャンセル
         </Button>
