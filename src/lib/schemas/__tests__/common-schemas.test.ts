@@ -25,7 +25,7 @@ describe('common-schemas', () => {
     })
 
     it('空白のみの文字列を拒否する', () => {
-      expect(() => requiredStringSchema.parse('   ')).not.toThrow() // trimしていないため通る
+      expect(() => requiredStringSchema.parse('   ')).toThrow()
     })
 
     it('nullやundefinedを拒否する', () => {

@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-
 /**
  * 汎用的なバリデーションスキーマの集約ファイル
  * 再利用可能なスキーマコンポーネントを提供します
@@ -9,6 +8,7 @@ import { z } from 'zod'
 // 汎用的な文字列のスキーマ
 export const requiredStringSchema = z
   .string()
+  .trim()
   .min(1, { message: 'この項目は必須です' })
 
 // メールアドレス関連のスキーマ
@@ -22,12 +22,14 @@ export const passwordSchema = requiredStringSchema
   .max(100, { message: 'パスワードは100文字以下で入力してください' })
 
 // 名前関連のスキーマ
-export const nameSchema = requiredStringSchema
-  .max(50, { message: '名前は50文字以下で入力してください' })
+export const nameSchema = requiredStringSchema.max(50, {
+  message: '名前は50文字以下で入力してください',
+})
 
 // タイトル関連のスキーマ
-export const titleSchema = requiredStringSchema
-  .max(100, { message: 'タイトルは100文字以下で入力してください' })
+export const titleSchema = requiredStringSchema.max(100, {
+  message: 'タイトルは100文字以下で入力してください',
+})
 
 // 説明文関連のスキーマ
 export const descriptionSchema = z
