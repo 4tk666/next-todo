@@ -1,5 +1,5 @@
 import { signOut } from '@/auth'
-import { Button } from './button'
+import { Button } from '../../elements/button'
 
 async function handleSignOut() {
   'use server'

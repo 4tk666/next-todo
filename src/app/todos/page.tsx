@@ -1,8 +1,8 @@
 import { auth } from '@/auth'
-import { TodoItem } from '@/components/todo-item'
+import { TodoCreate } from '@/components/features/todo/todo-create'
+import { TodoItem } from '@/components/features/todo/todo-item'
 import { getTodos } from '@/lib/data/getTodos'
 import { redirect } from 'next/navigation'
-import { TodoPageClient } from './client'
 
 export default async function TodosPage() {
   const session = await auth()
@@ -25,7 +25,7 @@ export default async function TodosPage() {
               マイタスク
             </h2>
           </div>
-          <TodoPageClient />
+          <TodoCreate />
         </div>
 
         {/* タスクリスト表 */}

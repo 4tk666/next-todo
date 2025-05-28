@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 import Link from 'next/link'
-import { SignOutButton } from './sign-out-button'
+import { SignOutButton } from '../features/auth/sign-out-button'
 
 export async function Header() {
   const session = await auth()

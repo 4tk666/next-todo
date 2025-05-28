@@ -1,7 +1,7 @@
 'use client'
 
-import { FormError } from '@/components/form-error'
-import { Input } from '@/components/input'
+import { FormError } from './form-error'
+import { Input } from './input'
 
 type FormFieldProps = {
   id: string

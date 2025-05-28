@@ -1,12 +1,12 @@
 'use client'
 
-import { Button } from '@/components/button'
-import { FormField } from '@/components/form-field'
+import { Button } from '@/components/elements/button'
+import { FormField } from '@/components/elements/form-field'
 import type { ActionState } from '@/types/form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
-import { signInAction } from './actions'
+import { signInAction } from '../../../lib/server-actions/auth/sign-in-actions'
 
 export default function SignInPage() {
   const router = useRouter()

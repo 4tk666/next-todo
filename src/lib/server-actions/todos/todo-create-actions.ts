@@ -2,9 +2,9 @@
 
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
+import { createTodoSchema } from '@/lib/schemas/todos/todo-create-schema'
 import type { ActionState } from '@/types/form'
 import { revalidatePath } from 'next/cache'
-import { createTodoSchema } from './schema'
 
 /**
  * タスクを新規作成するサーバーアクション（useActionState対応版）

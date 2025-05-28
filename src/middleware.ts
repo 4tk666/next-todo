@@ -1,5 +1,5 @@
 import { auth } from '@/auth'
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
+import { DEFAULT_LOGIN_REDIRECT } from '@/constants/routes'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 

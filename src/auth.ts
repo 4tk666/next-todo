@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/prisma'
-import { comparePassword } from '@/lib/auth-utils'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import NextAuth, { type User, type NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
+import { comparePassword } from './lib/utils/auth-utils'
 
 // 認証APIのベースパス
 export const BASE_PATH = '/api/auth'
