@@ -3,6 +3,7 @@
 import { ConfirmationDialog } from '@/components/elements/confirmation-dialog'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { deleteTodoAction } from '@/lib/server-actions/todos/todo-delete-actions'
+import { clsx } from 'clsx'
 import { useState, useTransition } from 'react'
 import { IoTrash } from 'react-icons/io5'
 
@@ -27,12 +28,13 @@ export function TodoDelete({ todo }: TodoDeleteProps) {
       {/* 削除ボタン */}
       <button
         type="button"
-        className="
-          p-1.5 text-red-600 hover:text-red-800 hover:bg-red-50 
-          rounded transition-colors focus:outline-none 
-          focus:ring-2 focus:ring-red-500 focus:ring-offset-2
-          opacity-0 group-hover:opacity-100
-        "
+        className={clsx(
+          'p-1.5',
+          'text-red-600 hover:text-red-800 hover:bg-red-50',
+          'rounded',
+          'transition-colors opacity-0 group-hover:opacity-100',
+          'focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2',
+        )}
         aria-label={`タスク「${todo.title}」を削除`}
         onClick={() => setIsDialogOpen(true)}
         disabled={isPendingTransition}

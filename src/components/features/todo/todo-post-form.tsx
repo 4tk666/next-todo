@@ -4,6 +4,7 @@ import { Button } from '@/components/elements/button'
 import { Textarea } from '@/components/elements/textarea'
 import { createTodoAction } from '@/lib/server-actions/todos/todo-create-actions'
 import type { ActionState } from '@/types/form'
+import { clsx } from 'clsx'
 import { useActionState } from 'react'
 import { FormError } from '../../elements/form-error'
 import { Input } from '../../elements/input'
@@ -81,7 +82,11 @@ export function TodoForm({ onSuccess, onCancel }: TodoFormProps) {
           type="button"
           onClick={onCancel}
           disabled={isPending}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 flex-1"
+          className={clsx(
+            'flex-1',
+            'bg-gray-300 hover:bg-gray-400',
+            'text-gray-800',
+          )}
         >
           キャンセル
         </Button>

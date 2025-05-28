@@ -3,6 +3,7 @@
 import { Button } from '@/components/elements/button'
 import { SideOverlay } from '@/components/elements/side-overlay'
 import { TodoForm } from '@/components/features/todo/todo-post-form'
+import { clsx } from 'clsx'
 import { useState } from 'react'
 
 /**
@@ -17,7 +18,7 @@ export function TodoCreate() {
 
   return (
     <>
-      <Button className="max-w-[120px]" onClick={openForm}>
+      <Button className={clsx('max-w-[120px]')} onClick={openForm}>
         タスクを作成
       </Button>
 

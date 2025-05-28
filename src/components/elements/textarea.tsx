@@ -1,5 +1,7 @@
 'use client'
 
+import { clsx } from 'clsx'
+
 type TextareaProps = {
   id: string
   name?: string
@@ -25,25 +27,22 @@ export function Textarea({
   errors,
   disabled = false,
 }: TextareaProps) {
-  // 基本のスタイルクラス
-  const baseClassNames =
-    'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-1.5 text-gray-800 border'
-
-  // エラー時のクラス
-  const errorClassNames =
-    errors && errors.length > 0
-      ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-      : ''
-
-  // 最終的なクラス名
-  const finalClassNames =
-    `${baseClassNames} ${errorClassNames} ${className}`.trim()
+  const hasErrors = errors && errors.length > 0
 
   return (
     <textarea
       id={id}
       name={name}
-      className={finalClassNames}
+      className={clsx(
+        'mt-1 block w-full',
+        'p-1.5',
+        'rounded-md border shadow-sm',
+        'text-gray-800 sm:text-sm',
+        hasErrors
+          ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+          : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500',
+        className,
+      )}
       placeholder={placeholder}
       rows={rows}
       defaultValue={defaultValue}
