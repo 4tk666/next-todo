@@ -6,6 +6,7 @@ type CheckboxProps = {
   id: string
   /** チェックボックスのラベル */
   label?: string
+  name?: string
   /** チェック状態 */
   checked: boolean
   /** 無効状態 */
@@ -24,6 +25,7 @@ type CheckboxProps = {
  */
 export function Checkbox({
   id,
+  name,
   label,
   checked,
   disabled,
@@ -34,6 +36,7 @@ export function Checkbox({
     <div className="flex items-center gap-2">
       <CheckboxPrimitive.Root
         id={id}
+        name={name}
         checked={checked}
         disabled={disabled}
         onCheckedChange={(checkedState) => {
