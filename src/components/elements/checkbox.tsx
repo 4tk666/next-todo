@@ -1,6 +1,8 @@
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import { FaCheck } from 'react-icons/fa'
 import { clsx } from 'clsx'
+import { cn } from '@/lib/utils/class-utils'
+
 
 type CheckboxProps = {
   id: string
@@ -42,7 +44,7 @@ export function Checkbox({
         onCheckedChange={(checkedState) => {
           onChange(!!checkedState)
         }}
-        className={clsx(
+        className={cn(
           // レイアウト・配置
           'flex items-center justify-center',
           // サイズ・間隔

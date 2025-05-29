@@ -1,6 +1,6 @@
 'use client'
 
-import { clsx } from 'clsx'
+import { cn } from '@/lib/utils/class-utils'
 
 type InputProps = {
   id: string
@@ -36,7 +36,7 @@ export function Input({
       id={id}
       name={name}
       type={type}
-      className={clsx(
+      className={cn(
         'mt-1 block w-full',
         'p-1.5',
         'rounded-md border shadow-sm',
