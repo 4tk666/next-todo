@@ -12,7 +12,9 @@ async function handleSignOut() {
 export async function SignOutButton() {
   return (
     <form action={handleSignOut}>
-      <Button type="submit">ログアウト</Button>
+      <Button type="submit" variant="outline">
+        ログアウト
+      </Button>
     </form>
   )
 }

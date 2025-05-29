@@ -1,36 +1,38 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import type { ReactNode, ComponentPropsWithoutRef } from 'react'
+import Link from 'next/link'
 import { cn } from '@/lib/utils/class-utils'
 
-type ButtonVariant = 'primary' | 'outline'
+type LinkButtonVariant = 'primary' | 'outline'
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type LinkButtonProps = ComponentPropsWithoutRef<typeof Link> & {
   children: ReactNode
-  variant?: ButtonVariant
+  variant?: LinkButtonVariant
+  className?: string
 }
 
-export function Button({
+/**
+ * ボタンのようなスタイルを持つLinkコンポーネント
+ * aタグの中にbuttonを入れ子にしない、適切なHTML構造を提供します
+ */
+export function LinkButton({
   children,
-  disabled,
-  className = '',
-  type = 'button',
   variant = 'primary',
+  className = '',
   ...props
-}: ButtonProps) {
-  const getVariantStyles = (variant: ButtonVariant): string => {
+}: LinkButtonProps) {
+  const getVariantStyles = (variant: LinkButtonVariant): string => {
     switch (variant) {
       case 'primary':
         return cn(
           'text-white',
           'bg-indigo-600 hover:bg-indigo-500',
           'focus-visible:outline-indigo-600',
-          'disabled:bg-gray-300 disabled:text-gray-500',
         )
       case 'outline':
         return cn(
           'text-indigo-600 border border-indigo-600',
           'bg-transparent hover:bg-indigo-50',
           'focus-visible:outline-indigo-600',
-          'disabled:border-gray-300 disabled:text-gray-300 disabled:bg-transparent',
         )
       default:
         return ''
@@ -38,23 +40,20 @@ export function Button({
   }
 
   return (
-    <button
-      type={type}
-      disabled={disabled}
+    <Link
       className={cn(
-        'group cursor-pointer relative',
-        'flex w-full justify-center',
+        'inline-flex items-center justify-center',
         'px-4 py-2',
         'rounded-md',
         'text-sm font-semibold',
         'focus-visible:outline-2 focus-visible:outline-offset-2',
-        'disabled:cursor-not-allowed',
+        'transition-colors duration-200',
         getVariantStyles(variant),
         className,
       )}
       {...props}
     >
       {children}
-    </button>
+    </Link>
   )
 }

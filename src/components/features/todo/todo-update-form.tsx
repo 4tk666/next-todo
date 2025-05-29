@@ -6,7 +6,6 @@ import { Textarea } from '@/components/elements/textarea'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { updateTodoAction } from '@/lib/server-actions/todos/todo-update-actions'
 import type { ActionState } from '@/types/form'
-import { clsx } from 'clsx'
 import { useActionState } from 'react'
 import { useState } from 'react'
 import { FormError } from '../../elements/form-error'
@@ -105,20 +104,16 @@ export function TodoUpdateForm({
       </div>
 
       <div className="flex space-x-4">
-        <Button type="submit" disabled={isPending} className="flex-1">
-          {isPending ? '更新中...' : 'タスクを更新'}
-        </Button>
         <Button
           type="button"
           onClick={onCancel}
           disabled={isPending}
-          className={clsx(
-            'flex-1',
-            'bg-gray-300 hover:bg-gray-400',
-            'text-gray-800',
-          )}
+          variant="outline"
         >
           キャンセル
+        </Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? '更新中...' : 'タスクを更新'}
         </Button>
       </div>
     </form>
