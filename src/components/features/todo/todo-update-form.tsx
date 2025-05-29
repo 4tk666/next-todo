@@ -105,20 +105,16 @@ export function TodoUpdateForm({
       </div>
 
       <div className="flex space-x-4">
-        <Button type="submit" disabled={isPending} className="flex-1">
-          {isPending ? '更新中...' : 'タスクを更新'}
-        </Button>
         <Button
           type="button"
           onClick={onCancel}
           disabled={isPending}
-          className={clsx(
-            'flex-1',
-            'bg-gray-300 hover:bg-gray-400',
-            'text-gray-800',
-          )}
+          variant="outline"
         >
           キャンセル
+        </Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? '作成中...' : 'タスクを更新'}
         </Button>
       </div>
     </form>
