@@ -5,6 +5,7 @@ import { clsx } from 'clsx'
 import { FiEdit2 } from 'react-icons/fi'
 import { TodoDelete } from './todo-delete'
 import { TodoUpdate } from './todo-update'
+import { TodoUpdateFormCheckbox} from './todo-update-form-checkbox'
 
 type TodoItemProps = {
   todo: TodoDTO
@@ -16,17 +17,7 @@ export function TodoItem({ todo }: TodoItemProps) {
       <td
         className={clsx('w-12 p-3', 'text-center', 'border-r border-gray-200')}
       >
-        <input
-          type="checkbox"
-          checked={todo.isComplete}
-          onChange={() => undefined}
-          className={clsx(
-            'h-5 w-5',
-            'text-blue-600 border-gray-300 rounded',
-            'focus:ring-blue-500',
-          )}
-          aria-label={`${todo.title}を${todo.isComplete ? '未完了' : '完了'}としてマーク`}
-        />
+        <TodoUpdateFormCheckbox todo={todo} />
       </td>
       <td className={clsx('p-3', 'border-r border-gray-200')}>
         <div
