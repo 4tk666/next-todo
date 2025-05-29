@@ -3,6 +3,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { clsx } from 'clsx'
 import { IoClose } from 'react-icons/io5'
+import { Button } from './button'
 
 type ConfirmationDialogProps = {
   /** ダイアログのタイトル */
@@ -107,31 +108,19 @@ export function ConfirmationDialog({
             {/* アクションボタン */}
             <div className="flex justify-end space-x-3">
               <Dialog.Close asChild>
-                <button
-                  type="button"
-                  className={clsx(
-                    'px-4 py-2',
-                    'rounded-md border border-gray-300',
-                    'text-gray-700 bg-white hover:bg-gray-50',
-                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                    'transition-colors',
-                    'disabled:opacity-50 disabled:cursor-not-allowed',
-                  )}
+                <Button
+                  onClick={onClose}
+                  variant="outline"
                   disabled={isLoading}
                 >
-                  {cancelText}
-                </button>
+                  キャンセル
+                </Button>
               </Dialog.Close>
 
-              <button
+              <Button
                 type="button"
                 className={clsx(
-                  'px-4 py-2',
-                  'rounded-md font-medium',
                   'bg-red-600 text-white hover:bg-red-700',
-                  'focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2',
-                  'transition-colors',
-                  'disabled:opacity-50 disabled:cursor-not-allowed',
                 )}
                 disabled={isLoading}
                 onClick={onConfirm}
@@ -144,7 +133,7 @@ export function ConfirmationDialog({
                 ) : (
                   confirmText
                 )}
-              </button>
+              </Button>
             </div>
           </div>
         </Dialog.Content>
