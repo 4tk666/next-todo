@@ -1,11 +1,10 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, ComponentPropsWithoutRef } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils/class-utils'
 
 type LinkButtonVariant = 'primary' | 'outline'
 
-type LinkButtonProps = {
-  href: string
+type LinkButtonProps = ComponentPropsWithoutRef<typeof Link> & {
   children: ReactNode
   variant?: LinkButtonVariant
   className?: string
@@ -16,10 +15,10 @@ type LinkButtonProps = {
  * aタグの中にbuttonを入れ子にしない、適切なHTML構造を提供します
  */
 export function LinkButton({
-  href,
   children,
   variant = 'primary',
   className = '',
+  ...props
 }: LinkButtonProps) {
   const getVariantStyles = (variant: LinkButtonVariant): string => {
     switch (variant) {
@@ -42,7 +41,6 @@ export function LinkButton({
 
   return (
     <Link
-      href={href}
       className={cn(
         'inline-flex items-center justify-center',
         'px-4 py-2',
@@ -53,6 +51,7 @@ export function LinkButton({
         getVariantStyles(variant),
         className,
       )}
+      {...props}
     >
       {children}
     </Link>
