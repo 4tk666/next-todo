@@ -3,9 +3,7 @@
 import { auth } from '@/auth'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { prisma } from '@/lib/prisma'
-import {
-  updateTodoSchema,
-} from '@/lib/schemas/todos/todo-update-schema'
+import { updateTodoSchema } from '@/lib/schemas/todos/todo-update-schema'
 import type { ActionState } from '@/types/form'
 import { revalidatePath } from 'next/cache'
 
@@ -93,6 +91,72 @@ export async function updateTodoAction({
       success: false,
       error: {
         message: 'タスクの更新に失敗しました',
+      },
+    }
+  }
+}
+
+/**
+ * Todoの完了状態を切り替えるサーバーアクション
+ * @param todoId - TodoのID
+ * @param isComplete - 新しい完了状態
+ * @returns 更新結果
+ */
+export async function toggleTodoCompleteAction(
+  todoId: string,
+  isComplete: boolean,
+): Promise<ActionState> {
+  const session = await auth()
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      error: {
+        message: 'ログインが必要です',
+      },
+    }
+  }
+
+  try {
+    // Todoの存在確認と所有者チェック
+    const existingTodo = await prisma.todo.findFirst({
+      where: {
+        id: todoId,
+        userId: session.user.id,
+      },
+    })
+
+    if (!existingTodo) {
+      return {
+        success: false,
+        error: {
+          message: 'タスクが見つかりません',
+        },
+      }
+    }
+
+    // Todoの完了状態を更新
+    await prisma.todo.update({
+      where: {
+        id: todoId,
+      },
+      data: {
+        isComplete,
+        updatedAt: new Date(),
+      },
+    })
+
+    // ページを再検証
+    revalidatePath('/todos')
+
+    return {
+      success: true,
+    }
+  } catch (error) {
+    console.error('Todo完了状態更新エラー:', error)
+    return {
+      success: false,
+      error: {
+        message: 'タスクの状態更新に失敗しました',
       },
     }
   }
