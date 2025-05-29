@@ -1,5 +1,5 @@
-import clsx from 'clsx'
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { cn } from '@/lib/utils/class-utils'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode
@@ -16,7 +16,7 @@ export function Button({
     <button
       type={type}
       disabled={disabled}
-      className={clsx(
+      className={cn(
         'group cursor-pointer relative',
         'flex w-full justify-center',
         'px-4 py-2',

@@ -1,6 +1,6 @@
 'use client'
 
-import { clsx } from 'clsx'
+import { cn } from '@/lib/utils/class-utils'
 
 type TextareaProps = {
   id: string
@@ -33,7 +33,7 @@ export function Textarea({
     <textarea
       id={id}
       name={name}
-      className={clsx(
+      className={cn(
         'mt-1 block w-full',
         'p-1.5',
         'rounded-md border shadow-sm',
