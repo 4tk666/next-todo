@@ -1,9 +1,10 @@
+// .vscode/settings.json の修正案
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "biomejs.biome",
   "editor.codeActionsOnSave": {
-    "quickfix.biome": "explicit",
-    "source.organizeImports.biome": "explicit"
+    // 一度に1つの操作だけを行うように設定
+    "quickfix.biome": "explicit"
   },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma",

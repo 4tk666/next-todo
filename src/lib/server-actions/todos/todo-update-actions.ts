@@ -30,7 +30,7 @@ export async function updateTodoAction({
     id: todo.id,
     title: formData.get('title'),
     description: formData.get('description'),
-    isComplete: todo.isComplete,
+    isComplete: formData.get('isComplete') === 'on',
   }
 
   // バリデーション

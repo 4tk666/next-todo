@@ -1,12 +1,14 @@
 'use client'
 
 import { Button } from '@/components/elements/button'
+import { Checkbox } from '@/components/elements/checkbox'
 import { Textarea } from '@/components/elements/textarea'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { updateTodoAction } from '@/lib/server-actions/todos/todo-update-actions'
 import type { ActionState } from '@/types/form'
 import { clsx } from 'clsx'
 import { useActionState } from 'react'
+import { useState } from 'react'
 import { FormError } from '../../elements/form-error'
 import { Input } from '../../elements/input'
 
@@ -17,6 +19,7 @@ type TodoUpdateFormProps = {
   onSuccess: () => void
   /** キャンセル時のコールバック */
   onCancel: () => void
+  setIsChecked: (isChecked: boolean) => void
 }
 
 /**
@@ -26,13 +29,19 @@ export function TodoUpdateForm({
   todo,
   onSuccess,
   onCancel,
+  setIsChecked,
 }: TodoUpdateFormProps) {
+  // フォーム上での完了状態をローカルで管理
+  const [isLocalChecked, setIsLocalChecked] = useState(todo.isComplete)
+
+  // タスクの完了状態を管理する状態
   const [state, action, isPending] = useActionState(
     async (prevState: ActionState | undefined, formData: FormData) => {
       const result = await updateTodoAction({ formData, todo })
       if (result.success) {
         // 成功時のコールバック
         onSuccess()
+        setIsChecked(isLocalChecked)
       }
 
       return result
@@ -44,6 +53,17 @@ export function TodoUpdateForm({
     <form action={action} className="space-y-6">
       {/* 全体エラーメッセージ */}
       {state?.error && <FormError errors={[state.error.message]} />}
+      {/* 完了状態チェックボックス */}
+      <div className="flex items-center">
+        <Checkbox
+          id="isComplete"
+          name="isComplete"
+          label="完了にする"
+          checked={isLocalChecked}
+          disabled={isPending}
+          onChange={(checked) => setIsLocalChecked(checked)}
+        />
+      </div>
 
       <div>
         <label

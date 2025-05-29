@@ -10,13 +10,18 @@ type TodoUpdateProps = {
   todo: TodoDTO
   /** 編集ボタンとして表示する子要素 */
   children: React.ReactNode
+  setIsChecked: (isChecked: boolean) => void
 }
 
 /**
  * Todo編集機能を提供するコンポーネント
  * 編集ボタンクリック時にサイドオーバーレイでフォームを表示
  */
-export function TodoUpdate({ todo, children }: TodoUpdateProps) {
+export function TodoUpdate({
+  todo,
+  children,
+  setIsChecked,
+}: TodoUpdateProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
 
   const openForm = () => setIsFormOpen(true)
@@ -43,6 +48,7 @@ export function TodoUpdate({ todo, children }: TodoUpdateProps) {
             todo={todo}
             onSuccess={closeForm}
             onCancel={closeForm}
+            setIsChecked={setIsChecked}
           />
         </SideOverlay>
       )}

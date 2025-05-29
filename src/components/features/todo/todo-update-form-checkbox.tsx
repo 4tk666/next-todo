@@ -3,24 +3,29 @@
 import { Checkbox } from '@/components/elements/checkbox'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { toggleTodoCompleteAction } from '@/lib/server-actions/todos/todo-update-actions'
-import { useState, useTransition } from 'react'
+import { useTransition } from 'react'
 
 type TodoCheckboxProps = {
   /** Todo項目 */
   todo: TodoDTO
+  isChecked: boolean
+  setIsChecked: (isChecked: boolean) => void
 }
 
 /**
  * Todo完了状態を切り替えるチェックボックスコンポーネント
  * よりシンプルなサーバーアクション統合版
  */
-export function TodoUpdateFormCheckbox({ todo }: TodoCheckboxProps) {
+export function TodoUpdateFormCheckbox({
+  todo,
+  isChecked,
+  setIsChecked,
+}: TodoCheckboxProps) {
   const [isPending, startTransition] = useTransition()
-  const [isChecked, setIsChecked] = useState(todo.isComplete)
 
   return (
     <Checkbox
-      id="todo-checkbox"
+      id="isCompleteTableRow"
       checked={isChecked}
       disabled={isPending}
       onChange={(isNewChecked) => {
