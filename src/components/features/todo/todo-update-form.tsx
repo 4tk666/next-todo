@@ -6,7 +6,6 @@ import { Textarea } from '@/components/elements/textarea'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { updateTodoAction } from '@/lib/server-actions/todos/todo-update-actions'
 import type { ActionState } from '@/types/form'
-import { clsx } from 'clsx'
 import { useActionState } from 'react'
 import { useState } from 'react'
 import { FormError } from '../../elements/form-error'
@@ -114,7 +113,7 @@ export function TodoUpdateForm({
           キャンセル
         </Button>
         <Button type="submit" disabled={isPending}>
-          {isPending ? '作成中...' : 'タスクを更新'}
+          {isPending ? '更新中...' : 'タスクを更新'}
         </Button>
       </div>
     </form>
