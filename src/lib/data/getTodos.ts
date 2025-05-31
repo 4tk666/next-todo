@@ -17,7 +17,19 @@ export async function getTodos() {
   const todos = await prisma.todo.findMany({
     where: {
       userId: session.user.id,
+      parentId: null,
+    },
+    include: {
+      children: {
+        include: {
+          children: true, // 孫TODOまで取得
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
     },
   })
+
   return todos.map(getTodoDTO)
 }

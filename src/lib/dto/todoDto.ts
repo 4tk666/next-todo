@@ -1,32 +1,39 @@
 import type { Todo } from '@prisma/client'
 
-export type TodoDTO = {
-  /** Todoの一意識別子 */
-  id: string
-  /** Todoのタイトル */
-  title: string
-  /** Todoの詳細説明（省略可能） */
-  description: string | null
-  /** Todoが完了しているかどうか */
-  isComplete: boolean
-  /** Todoの作成日時（ISO文字列形式） */
-  createdAt: string
-  /** Todoの更新日時（ISO文字列形式） */
-  updatedAt: string
+/**
+ * 階層構造を持つTodoの型定義
+ * 子TODOを含む場合の型を明示的に定義
+ */
+type TodoWithChildren = Todo & {
+  children?: TodoWithChildren[]
 }
 
+export type TodoDTO = {
+  id: string
+  title: string
+  description?: string
+  isComplete: boolean
+  dueDate?: string
+  parentId?: string
+  createdAt: string
+  updatedAt: string
+  children: TodoDTO[]
+}
 /**
  * TodoエンティティをDTOに変換する関数
  * @param todo - PrismaのTodoエンティティ
  * @returns TodoDTOオブジェクト
  */
-export  function getTodoDTO(todo: Todo): TodoDTO {
+export function getTodoDTO(todo: TodoWithChildren): TodoDTO {
   return {
     id: todo.id,
     title: todo.title,
-    description: todo.description,
+    description: todo.description ?? undefined,
     isComplete: todo.isComplete,
+    dueDate: todo.dueDate ? todo.dueDate.toISOString(): undefined,
+    parentId: todo.parentId ?? undefined,
     createdAt: todo.createdAt.toISOString(),
     updatedAt: todo.updatedAt.toISOString(),
+    children: todo.children?.map(getTodoDTO) ?? [],
   }
 }
