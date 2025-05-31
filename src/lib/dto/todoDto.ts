@@ -15,6 +15,7 @@ export type TodoDTO = {
   isComplete: boolean
   dueDate?: string
   parentId?: string
+  priority?: number
   createdAt: string
   updatedAt: string
   children: TodoDTO[]
@@ -30,8 +31,9 @@ export function getTodoDTO(todo: TodoWithChildren): TodoDTO {
     title: todo.title,
     description: todo.description ?? undefined,
     isComplete: todo.isComplete,
-    dueDate: todo.dueDate ? todo.dueDate.toISOString(): undefined,
+    dueDate: todo.dueDate?.toISOString(),
     parentId: todo.parentId ?? undefined,
+    priority: todo.priority ?? undefined,
     createdAt: todo.createdAt.toISOString(),
     updatedAt: todo.updatedAt.toISOString(),
     children: todo.children?.map(getTodoDTO) ?? [],
