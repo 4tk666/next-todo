@@ -51,7 +51,6 @@ export function Checkbox({
           'h-5 w-5',
           // ボーダー・装飾
           'border-2 border-gray-300 rounded-full',
-          'shadow-sm',
           // 色・テキスト
           'bg-white',
           'data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600',

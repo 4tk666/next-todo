@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 import { TodoCreate } from '@/components/features/todo/todo-create'
-import { TodoItem } from '@/components/features/todo/todo-item'
+import TodoList from '@/components/features/todo/todo-list'
 import { getTodos } from '@/lib/data/getTodos'
 import { redirect } from 'next/navigation'
 
@@ -13,7 +13,7 @@ export default async function TodosPage() {
   }
 
   // ログインユーザーのTodo一覧を取得
-  const todos = await getTodos()
+  const todosDto = await getTodos()
 
   return (
     <div className="container mx-auto max-w-[100%]">
@@ -46,19 +46,7 @@ export default async function TodosPage() {
             </tr>
           </thead>
           <tbody>
-            {todos.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="text-gray-500 text-center py-8">
-                  まだTodoがありません。新しいTodoを作成してください。
-                </td>
-              </tr>
-            ) : (
-              todos.map((todo) => (
-                <tr key={todo.id} className="group border-b border-gray-200">
-                  <TodoItem todo={todo} />
-                </tr>
-              ))
-            )}
+            <TodoList todosDto={todosDto} />
           </tbody>
         </table>
       </div>

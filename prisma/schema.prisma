@@ -56,15 +56,23 @@ model User {
 }
 
 model Todo {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   description String?
-  isComplete  Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isComplete  Boolean   @default(false)
+  dueDate     DateTime?
+  priority    Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   userId      String
+  parentId    String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent   Todo?  @relation("TodoParent", fields: [parentId], references: [id], onDelete: Cascade)
+  children Todo[] @relation("TodoParent")
+
+  @@index([userId])
+  @@index([parentId])
 }
 
 model VerificationToken {
