@@ -30,6 +30,7 @@ export async function createTodoAction(
   const values = {
     title: formData.get('title') as string,
     description: formData.get('description') as string,
+    dueDate: formData.get('dueDate') as string,
   }
 
   // バリデーション（safeParse使用）
@@ -53,6 +54,7 @@ export async function createTodoAction(
       data: {
         title: validationResult.data.title,
         description: validationResult.data.description,
+        dueDate: validationResult.data.dueDate,
         userId: session.user.id,
       },
     })

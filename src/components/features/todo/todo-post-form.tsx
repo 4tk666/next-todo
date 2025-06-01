@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/elements/button'
+import { DateInput } from '@/components/elements/date-input'
 import { Textarea } from '@/components/elements/textarea'
 import { createTodoAction } from '@/lib/server-actions/todos/todo-create-actions'
 import type { ActionState } from '@/types/form'
@@ -70,6 +71,17 @@ export function TodoForm({ onSuccess, onCancel }: TodoFormProps) {
         <FormError
           errors={state?.error?.fields?.description}
           id="description"
+        />
+      </div>
+
+      <div>
+        <DateInput
+          id="dueDate"
+          name="dueDate"
+          label="期日"
+          disabled={isPending}
+          defaultValue={state?.values?.dueDate}
+          errors={state?.error?.fields?.dueDate}
         />
       </div>
 

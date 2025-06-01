@@ -1,4 +1,7 @@
 @import "tailwindcss";
+/* react-datepickerのスタイルをインポート */
+@import 'react-datepicker/dist/react-datepicker.css';
+
 
 :root {
   --background: #121212;
