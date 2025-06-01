@@ -1,3 +1,4 @@
+import type { TodoPriority } from '@/constants/todo-priority'
 import type { Todo } from '@prisma/client'
 
 /**
@@ -15,7 +16,7 @@ export type TodoDTO = {
   isComplete: boolean
   dueDate?: string
   parentId?: string
-  priority?: number
+  priority?: TodoPriority
   createdAt: string
   updatedAt: string
   children: TodoDTO[]
@@ -33,7 +34,8 @@ export function getTodoDTO(todo: TodoWithChildren): TodoDTO {
     isComplete: todo.isComplete,
     dueDate: todo.dueDate?.toISOString(),
     parentId: todo.parentId ?? undefined,
-    priority: todo.priority ?? undefined,
+    // priorityの型修正 #57
+    priority: typeof todo.priority === 'number' ? todo.priority as TodoPriority : undefined,
     createdAt: todo.createdAt.toISOString(),
     updatedAt: todo.updatedAt.toISOString(),
     children: todo.children?.map(getTodoDTO) ?? [],

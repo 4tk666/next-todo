@@ -38,6 +38,8 @@ export default async function TodosPage() {
               <th className="p-3 text-left border-r border-gray-200">
                 タスク名
               </th>
+              <th className="p-3 text-left border-r border-gray-200">期日</th>
+              <th className="p-3 text-left border-r border-gray-200">優先度</th>
               <th className="p-3 text-left  border-r border-gray-200">
                 作成日
               </th>

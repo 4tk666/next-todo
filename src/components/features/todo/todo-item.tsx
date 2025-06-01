@@ -7,6 +7,7 @@ import { FiEdit2, FiChevronRight, FiChevronDown } from 'react-icons/fi'
 import { TodoDelete } from './todo-delete'
 import { TodoUpdate } from './todo-update'
 import { TodoUpdateFormCheckbox } from './todo-update-form-checkbox'
+import { TODO_PRIORITY_LABELS } from '@/constants/todo-priority'
 
 type TodoItemProps = {
   todo: TodoDTO
@@ -98,6 +99,28 @@ export function TodoItem({
             )}
           </div>
         </div>
+      </td>
+      <td
+        className={clsx(
+          'p-3',
+          'text-xs text-gray-500 whitespace-nowrap',
+          'border-r border-gray-200',
+        )}
+      >
+        {todo.dueDate
+          ? new Date(todo.dueDate).toLocaleDateString('ja-JP')
+          : '-'}
+      </td>
+      <td
+        className={clsx(
+          'p-3',
+          'text-xs text-gray-500 whitespace-nowrap',
+          'border-r border-gray-200',
+        )}
+      >
+        {typeof todo.priority === 'number' && todo.priority in TODO_PRIORITY_LABELS
+          ? TODO_PRIORITY_LABELS[todo.priority]
+          : '-'}
       </td>
       <td
         className={clsx(
