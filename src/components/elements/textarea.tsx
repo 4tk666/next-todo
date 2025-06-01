@@ -38,9 +38,11 @@ export function Textarea({
         'p-1.5',
         'rounded-md border shadow-sm',
         'text-gray-800 sm:text-sm',
+        // フォーカス状態・アウトライン
+        'focus-visible:outline-2 focus-visible:outline-offset-2',
         hasErrors
-          ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-          : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500',
+          ? 'border-red-500 focus-visible:outline-red-600'
+          : 'border-gray-300 focus-visible:outline-indigo-600',
         className,
       )}
       placeholder={placeholder}

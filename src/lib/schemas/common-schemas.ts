@@ -41,6 +41,17 @@ export const descriptionSchema = z
 // ブール値のスキーマ
 export const booleanSchema = z.boolean()
 
+// 期日のスキーマ（ISO文字列形式での入力を受け取り、日付に変換してバリデーション）
+export const dueDateSchema = z
+  .string()
+  .optional()
+  .nullable()
+  .transform((value) => {
+    if (!value) return null
+    const date = new Date(value)
+    return Number.isNaN(date.getTime()) ? null : date
+  })
+
 // パスワード確認用のrefineヘルパー関数
 export function createPasswordConfirmationRefine<
   T extends { password: string; confirmPassword: string },
