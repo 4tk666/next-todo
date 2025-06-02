@@ -10,7 +10,6 @@ import { revalidatePath } from 'next/cache'
 /**
  * 指定されたparentIdが有効かどうかを確認する
  * @param parentId 親TodoのID
- * @param userId 現在のユーザーID
  * @returns 有効な場合はtrue、無効な場合はfalse
  */
 async function validateParentId(parentId: string): Promise<boolean> {
