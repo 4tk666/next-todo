@@ -122,7 +122,7 @@ export function TodoForm({ onSuccess, onCancel }: TodoFormProps) {
         <input
           type="hidden"
           name="priority"
-          value={state?.values?.priority || ''}
+          value={state?.values?.priority ?? ''}
         />
       </div>
 

@@ -1,7 +1,6 @@
 'use server'
 
 import { auth } from '@/auth'
-import { TODO_PRIORITIES } from '@/constants/todo-priority'
 import { prisma } from '@/lib/prisma'
 import { createTodoSchema } from '@/lib/schemas/todos/todo-create-schema'
 import type { ActionState } from '@/types/form'
