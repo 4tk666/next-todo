@@ -25,7 +25,7 @@ export default async function TodosPage() {
               マイタスク
             </h2>
           </div>
-          <TodoCreate />
+          <TodoCreate todosDto={todosDto} />
         </div>
 
         {/* タスクリスト表 */}
