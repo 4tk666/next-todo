@@ -14,8 +14,11 @@ import {
   TODO_PRIORITIES,
   TODO_PRIORITY_LABELS,
 } from '@/constants/todo-priority'
+import type { TodoDTO } from '@/lib/dto/todoDto'
+import { DEFAULT_VALUES } from '@/constants/default-values'
 
 type TodoFormProps = {
+  todosDto: TodoDTO[]
   onSuccess: () => void
   onCancel: () => void
 }
@@ -23,7 +26,7 @@ type TodoFormProps = {
 /**
  * タスク作成フォームコンポーネント（サーバーアクション対応版）
  */
-export function TodoForm({ onSuccess, onCancel }: TodoFormProps) {
+export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
   const [state, action, isPending] = useActionState(
     async (prevState: ActionState | undefined, formData: FormData) => {
       const result = await createTodoAction(formData)
@@ -124,6 +127,43 @@ export function TodoForm({ onSuccess, onCancel }: TodoFormProps) {
           name="priority"
           value={state?.values?.priority ?? ''}
         />
+      </div>
+
+      <div>
+        <div className="mb-2">
+          <label
+            htmlFor="parentId"
+            className={clsx(
+              // レイアウト・配置
+              'block',
+              // 色・テキスト
+              'text-sm font-medium text-gray-700',
+            )}
+          >
+            親タスク
+          </label>
+        </div>
+        <Select
+          id="parentId"
+          name="parentId"
+          options={[
+            { value: DEFAULT_VALUES.UNSELECTED_STRING, label: '未設定' },
+            ...todosDto.map((option) => ({
+              value: option.id,
+              label: option.title,
+            })),
+          ]}
+          defaultValue={
+            state?.values?.parentId ?? DEFAULT_VALUES.UNSELECTED_STRING
+          }
+          disabled={isPending}
+        />
+        <input
+          type="hidden"
+          name="parentId"
+          value={state?.values?.parentId ?? DEFAULT_VALUES.UNSELECTED_STRING}
+        />
+        <FormError id="parentId" errors={state?.error?.fields?.parentId} />
       </div>
 
       <div className="flex space-x-4">

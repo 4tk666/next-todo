@@ -14,6 +14,7 @@ export const createTodoSchema = z.object({
   description: descriptionSchema,
   dueDate: dueDateSchema,
   priority: prioritySchema,
+  parentId: z.string().optional().nullable(),
 })
 
 export type CreateTodoFormValues = z.infer<typeof createTodoSchema>
