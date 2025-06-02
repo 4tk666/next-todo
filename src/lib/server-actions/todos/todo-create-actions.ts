@@ -1,6 +1,7 @@
 'use server'
 
 import { auth } from '@/auth'
+import { TODO_PRIORITIES } from '@/constants/todo-priority'
 import { prisma } from '@/lib/prisma'
 import { createTodoSchema } from '@/lib/schemas/todos/todo-create-schema'
 import type { ActionState } from '@/types/form'
@@ -31,6 +32,7 @@ export async function createTodoAction(
     title: formData.get('title') as string,
     description: formData.get('description') as string,
     dueDate: formData.get('dueDate') as string,
+    priority: formData.get('priority') as string,
   }
 
   // バリデーション（safeParse使用）
@@ -55,6 +57,7 @@ export async function createTodoAction(
         title: validationResult.data.title,
         description: validationResult.data.description,
         dueDate: validationResult.data.dueDate,
+        priority: validationResult.data.priority,
         userId: session.user.id,
       },
     })

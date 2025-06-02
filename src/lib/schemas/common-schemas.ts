@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { TODO_PRIORITIES, type TodoPriority } from '@/constants/todo-priority'
 
 /**
  * 汎用的なバリデーションスキーマの集約ファイル
@@ -61,3 +62,22 @@ export function createPasswordConfirmationRefine<
     path: ['confirmPassword'],
   })
 }
+
+// 優先度のスキーマ
+export const prioritySchema = z
+  .string()
+  .refine(
+    (value) => {
+      const numberValue = Number(value)
+      if (Number.isNaN(numberValue)) return false
+
+      return Object.values(TODO_PRIORITIES).includes(
+        numberValue as TodoPriority,
+      )
+    },
+    { message: '有効な優先度を選択してください' },
+  )
+  .transform((value) => {
+    const numberValue = Number(value)
+    return numberValue === TODO_PRIORITIES.UN_SELECTED ? null : numberValue
+  })

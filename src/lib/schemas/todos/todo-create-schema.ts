@@ -3,6 +3,7 @@ import {
   descriptionSchema,
   dueDateSchema,
   titleSchema,
+  prioritySchema,
 } from '../common-schemas'
 
 /**
@@ -12,6 +13,7 @@ export const createTodoSchema = z.object({
   title: titleSchema,
   description: descriptionSchema,
   dueDate: dueDateSchema,
+  priority: prioritySchema,
 })
 
 export type CreateTodoFormValues = z.infer<typeof createTodoSchema>
