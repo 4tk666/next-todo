@@ -31,6 +31,7 @@ export async function createTodoAction(
     title: formData.get('title') as string,
     description: formData.get('description') as string,
     dueDate: formData.get('dueDate') as string,
+    priority: formData.get('priority') as string,
   }
 
   // バリデーション（safeParse使用）
@@ -55,6 +56,7 @@ export async function createTodoAction(
         title: validationResult.data.title,
         description: validationResult.data.description,
         dueDate: validationResult.data.dueDate,
+        priority: validationResult.data.priority,
         userId: session.user.id,
       },
     })

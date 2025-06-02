@@ -8,6 +8,12 @@ import type { ActionState } from '@/types/form'
 import { useActionState } from 'react'
 import { FormError } from '../../elements/form-error'
 import { Input } from '../../elements/input'
+import { Select } from '@/components/elements/select'
+import clsx from 'clsx'
+import {
+  TODO_PRIORITIES,
+  TODO_PRIORITY_LABELS,
+} from '@/constants/todo-priority'
 
 type TodoFormProps = {
   onSuccess: () => void
@@ -82,6 +88,41 @@ export function TodoForm({ onSuccess, onCancel }: TodoFormProps) {
           disabled={isPending}
           defaultValue={state?.values?.dueDate}
           errors={state?.error?.fields?.dueDate}
+        />
+      </div>
+
+      <div>
+        <div className="mb-2">
+          <label
+            htmlFor="priority"
+            className={clsx(
+              // レイアウト・配置
+              'block',
+              // 色・テキスト
+              'text-sm font-medium text-gray-700',
+            )}
+          >
+            優先度
+          </label>
+        </div>
+        <Select
+          id="priority"
+          name="priority"
+          options={Object.values(TODO_PRIORITIES).map((priority) => ({
+            value: String(priority),
+            label: TODO_PRIORITY_LABELS[priority] ?? 'エラー',
+          }))}
+          defaultValue={
+            typeof state?.values?.priority === 'number'
+              ? String(state.values.priority)
+              : `${TODO_PRIORITIES.UN_SELECTED}`
+          }
+          disabled={isPending}
+        />
+        <input
+          type="hidden"
+          name="priority"
+          value={state?.values?.priority ?? ''}
         />
       </div>
 
