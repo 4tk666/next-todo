@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/elements/button'
 import { Checkbox } from '@/components/elements/checkbox'
-import { Textarea } from '@/components/elements/textarea'
+import { TextareaField } from '@/components/elements/fields/textarea-field'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { updateTodoAction } from '@/lib/server-actions/todos/todo-update-actions'
 import type { ActionState } from '@/types/form'
@@ -83,23 +83,15 @@ export function TodoUpdateForm({
       </div>
 
       <div>
-        <label
-          htmlFor="description"
-          className="block text-sm font-medium text-gray-700"
-        >
-          説明（任意）
-        </label>
-        <Textarea
+        <TextareaField
           id="description"
+          label="説明"
           name="description"
-          placeholder="タスクの詳細を入力（任意）"
+          placeholder="タスクの詳細を入力"
           rows={5}
           disabled={isPending}
           defaultValue={state?.values?.description ?? todo.description ?? ''}
-        />
-        <FormError
           errors={state?.error?.fields?.description}
-          id="description"
         />
       </div>
 

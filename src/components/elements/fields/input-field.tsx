@@ -6,7 +6,7 @@ import { Input } from '../input'
 
 type InputFieldProps = {
   id: string
-  label: string
+  label: React.ReactNode
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search'
   placeholder?: string
   defaultValue?: string

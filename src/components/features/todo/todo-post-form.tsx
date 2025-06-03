@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/elements/button'
 import { DateInput } from '@/components/elements/date-input'
-import { Textarea } from '@/components/elements/textarea'
+import { TextareaField } from '@/components/elements/fields/textarea-field'
 import { createTodoAction } from '@/lib/server-actions/todos/todo-create-actions'
 import type { ActionState } from '@/types/form'
 import { useActionState } from 'react'
@@ -63,23 +63,15 @@ export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
       </div>
 
       <div>
-        <label
-          htmlFor="description"
-          className="block text-sm font-medium text-gray-700"
-        >
-          説明（任意）
-        </label>
-        <Textarea
+        <TextareaField
           id="description"
+          label="説明"
           name="description"
-          placeholder="タスクの詳細を入力（任意）"
+          placeholder="タスクの詳細を入力"
           rows={5}
           disabled={isPending}
           defaultValue={state?.values?.description}
-        />
-        <FormError
           errors={state?.error?.fields?.description}
-          id="description"
         />
       </div>
 
