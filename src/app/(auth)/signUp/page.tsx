@@ -44,6 +44,7 @@ export default function SignUpPage() {
               placeholder="お名前を入力"
               defaultValue={state?.values?.name}
               errors={state?.error?.fields?.name}
+              required
             />
             <InputField
               id="email"
@@ -52,6 +53,7 @@ export default function SignUpPage() {
               placeholder="メールアドレスを入力"
               defaultValue={state?.values?.email}
               errors={state?.error?.fields?.email}
+              required
             />
             <InputField
               id="password"
@@ -60,6 +62,7 @@ export default function SignUpPage() {
               placeholder="パスワードを入力"
               defaultValue={state?.values?.password}
               errors={state?.error?.fields?.password}
+              required
             />
             <InputField
               id="confirmPassword"
@@ -68,6 +71,7 @@ export default function SignUpPage() {
               placeholder="パスワードを再入力"
               defaultValue={state?.values?.confirmPassword}
               errors={state?.error?.fields?.confirmPassword}
+              required
             />
           </div>
 
