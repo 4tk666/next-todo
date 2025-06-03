@@ -4,31 +4,14 @@ import { FormError } from '../form-error'
 import { FormLabel } from '../form-label'
 import { Textarea } from '../textarea'
 
-type TextareaFieldProps = {
-  /** 入力フィールドの一意識別子 */
-  id: string
+// TextareaコンポーネントのProps型をインポート
+type TextareaProps = React.ComponentProps<typeof Textarea>
+
+type TextareaFieldProps = TextareaProps & {
   /** フィールドのラベルテキスト */
   label: React.ReactNode
-  /** フォーム送信時のフィールド名 */
-  name?: string
-  /** プレースホルダーテキスト */
-  placeholder?: string
-  /** テキストエリアの行数 */
-  rows?: number
-  /** デフォルト値（非制御コンポーネント用） */
-  defaultValue?: string
-  /** 現在の値（制御コンポーネント用） */
-  value?: string
-  /** 値変更時のコールバック（制御コンポーネント用） */
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-  /** エラーメッセージの配列 */
-  errors?: string[]
   /** 必須項目かどうか */
   required?: boolean
-  /** 無効状態かどうか */
-  disabled?: boolean
-  /** 追加のCSSクラス名 */
-  className?: string
 }
 
 /**
@@ -60,35 +43,16 @@ type TextareaFieldProps = {
 export function TextareaField({
   id,
   label,
-  name = id,
-  placeholder,
-  rows = 3,
-  defaultValue,
-  value,
-  onChange,
-  errors,
   required = false,
-  disabled = false,
-  className,
+  ...textareaProps
 }: TextareaFieldProps) {
   return (
     <div>
       <FormLabel id={id} required={required}>
         {label}
       </FormLabel>
-      <Textarea
-        id={id}
-        name={name}
-        placeholder={placeholder}
-        rows={rows}
-        defaultValue={defaultValue}
-        value={value}
-        onChange={onChange}
-        errors={errors}
-        disabled={disabled}
-        className={className}
-      />
-      <FormError errors={errors} id={id} />
+      <Textarea id={id} {...textareaProps} />
+      <FormError errors={textareaProps.errors} id={id} />
     </div>
   )
 }
