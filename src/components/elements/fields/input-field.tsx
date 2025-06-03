@@ -4,50 +4,66 @@ import { FormError } from '../form-error'
 import { FormLabel } from '../form-label'
 import { Input } from '../input'
 
-type InputFieldProps = {
-  id: string
-  label: string
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search'
-  placeholder?: string
-  defaultValue?: string
-  value?: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  errors?: string[]
+// InputコンポーネントのProps型をインポート
+type InputProps = React.ComponentProps<typeof Input>
+
+type InputFieldProps = InputProps & {
+  /** フィールドのラベルテキスト */
+  label: React.ReactNode
+  /** 必須項目かどうか */
   required?: boolean
-  disabled?: boolean
-  autoComplete?: string
 }
 
+/**
+ * フォーム用Input Field
+ * 
+ * ラベル、エラー表示、バリデーション機能を含む統合型のInputコンポーネントです。
+ * フォーム内での使用を想定し、アクセシビリティとユーザビリティを考慮した設計となっています。
+ * 基底のInputコンポーネントのすべてのPropsを継承し、追加でlabelとrequiredプロパティを提供します。
+ * 
+ * @example
+ * ```tsx
+ * // 基本的な使用方法（非制御コンポーネント）
+ * <InputField
+ *   id="title"
+ *   label="タスクのタイトル"
+ *   placeholder="タイトルを入力してください"
+ *   errors={state?.error?.fields?.title}
+ * />
+ * 
+ * // 必須項目として使用
+ * <InputField
+ *   id="email"
+ *   label="メールアドレス"
+ *   type="email"
+ *   required
+ *   autoComplete="email"
+ *   errors={formErrors?.email}
+ * />
+ * 
+ * // 制御コンポーネントとして使用
+ * <InputField
+ *   id="search"
+ *   label="検索"
+ *   type="search"
+ *   value={searchTerm}
+ *   onChange={(e) => setSearchTerm(e.target.value)}
+ * />
+ * ```
+ */
 export function InputField({
   id,
   label,
-  type = 'text',
-  placeholder,
-  defaultValue,
-  value,
-  onChange,
-  errors,
   required = false,
-  disabled = false,
-  autoComplete,
+  ...inputProps
 }: InputFieldProps) {
   return (
     <div>
-      <FormLabel id={id}  required={required} >
+      <FormLabel id={id} required={required}>
         {label}
       </FormLabel>
-      <Input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        defaultValue={defaultValue}
-        value={value}
-        onChange={onChange}
-        errors={errors}
-        disabled={disabled}
-        autoComplete={autoComplete}
-      />
-      <FormError errors={errors} id={id} />
+      <Input id={id} {...inputProps} />
+      <FormError errors={inputProps.errors} id={id} />
     </div>
   )
 }
