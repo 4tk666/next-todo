@@ -107,9 +107,7 @@ export function TodoItem({
           'border-r border-gray-200',
         )}
       >
-        {todo.dueDate
-          ? new Date(todo.dueDate).toLocaleDateString('ja-JP')
-          : '-'}
+        {todo.dueDate ?? '-'}
       </td>
       <td
         className={clsx(
@@ -118,18 +116,10 @@ export function TodoItem({
           'border-r border-gray-200',
         )}
       >
-        {typeof todo.priority === 'number' && todo.priority in TODO_PRIORITY_LABELS
+        {typeof todo.priority === 'number' &&
+        todo.priority in TODO_PRIORITY_LABELS
           ? TODO_PRIORITY_LABELS[todo.priority]
           : '-'}
-      </td>
-      <td
-        className={clsx(
-          'p-3',
-          'text-xs text-gray-400 whitespace-nowrap',
-          'border-r border-gray-200',
-        )}
-      >
-        {new Date(todo.createdAt).toLocaleDateString('ja-JP')}
       </td>
       <td
         className={clsx('p-3 w-12', 'text-right', 'border-r border-gray-200')}

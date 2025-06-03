@@ -40,9 +40,6 @@ export default async function TodosPage() {
               </th>
               <th className="p-3 text-left border-r border-gray-200">期日</th>
               <th className="p-3 text-left border-r border-gray-200">優先度</th>
-              <th className="p-3 text-left  border-r border-gray-200">
-                作成日
-              </th>
               <th className="w-14 p-3 border-r border-gray-200" />
               <th className="w-14 p-3" />
             </tr>
