@@ -25,12 +25,12 @@ export function parseStringToDate({
   formatType = 'yyyy/MM/dd',
 }: FormatStringToDate): Date | undefined {
 
-  const parsedDate = parse(dateString, formatType, createDate())
+  const parsedDate = parse(dateString, formatType, new Date())
   if (!isValid(parsedDate)) return
   return parsedDate
 }
 
-export function parseDateToString({
+export function formatDateToString({
   date,
   formatType = 'yyyy/MM/dd',
 }: FormatDateToString): string {

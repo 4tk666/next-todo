@@ -1,5 +1,6 @@
 import type { TodoPriority } from '@/constants/todo-priority'
 import type { Todo } from '@prisma/client'
+import { formatDateToString } from '../utils/date-utils'
 
 /**
  * 階層構造を持つTodoの型定義
@@ -32,12 +33,26 @@ export function getTodoDTO(todo: TodoWithChildren): TodoDTO {
     title: todo.title,
     description: todo.description ?? undefined,
     isComplete: todo.isComplete,
-    dueDate: todo.dueDate?.toISOString(),
+    dueDate: todo.dueDate
+      ? formatDateToString({
+          date: todo.dueDate,
+          formatType: 'yyyy/MM/dd',
+        })
+      : undefined,
     parentId: todo.parentId ?? undefined,
     // priorityの型修正 #57
-    priority: typeof todo.priority === 'number' ? todo.priority as TodoPriority : undefined,
-    createdAt: todo.createdAt.toISOString(),
-    updatedAt: todo.updatedAt.toISOString(),
+    priority:
+      typeof todo.priority === 'number'
+        ? (todo.priority as TodoPriority)
+        : undefined,
+    createdAt: formatDateToString({
+      date: todo.createdAt,
+      formatType: 'yyyy/MM/dd HH:mm:ss',
+    }),
+    updatedAt: formatDateToString({
+      date: todo.updatedAt,
+      formatType: 'yyyy/MM/dd HH:mm:ss',
+    }),
     children: todo.children?.map(getTodoDTO) ?? [],
   }
 }

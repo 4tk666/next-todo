@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { createDate, parseStringToDate, parseDateToString } from '../date-utils'
+import {
+  createDate,
+  parseStringToDate,
+  formatDateToString,
+} from '../date-utils'
 
 describe('date-utils', () => {
   const testDate = new Date('2025-06-03T10:30:00.000Z')
@@ -58,14 +62,14 @@ describe('date-utils', () => {
     })
   })
 
-  describe('parseDateToString', () => {
+  describe('formatDateToString', () => {
     it('Dateオブジェクトをデフォルト形式（yyyy/MM/dd）でフォーマットする', () => {
-      const result = parseDateToString({ date: testDate })
+      const result = formatDateToString({ date: testDate })
       expect(result).toBe('2025/06/03')
     })
 
     it('指定したフォーマットでDateをフォーマットする', () => {
-      const result = parseDateToString({
+      const result = formatDateToString({
         date: testDate,
         formatType: 'yyyy/MM/dd HH:mm:ss',
       })
@@ -75,7 +79,7 @@ describe('date-utils', () => {
     })
 
     it('年月のみのフォーマットを適用する', () => {
-      const result = parseDateToString({
+      const result = formatDateToString({
         date: testDate,
         formatType: 'yyyy/MM',
       })
@@ -84,7 +88,7 @@ describe('date-utils', () => {
 
     it('無効なDateオブジェクトの場合はエラーメッセージを返す', () => {
       const invalidDate = new Date('invalid-date')
-      const result = parseDateToString({ date: invalidDate })
+      const result = formatDateToString({ date: invalidDate })
       expect(result).toBe('error: Invalid date')
     })
   })
