@@ -1,9 +1,10 @@
 'use client'
 
-import { FormError } from './form-error'
-import { Input } from './input'
+import { FormError } from '../form-error'
+import { FormLabel } from '../form-label'
+import { Input } from '../input'
 
-type FormFieldProps = {
+type InputFieldProps = {
   id: string
   label: string
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search'
@@ -17,7 +18,7 @@ type FormFieldProps = {
   autoComplete?: string
 }
 
-export function FormField({
+export function InputField({
   id,
   label,
   type = 'text',
@@ -29,17 +30,12 @@ export function FormField({
   required = false,
   disabled = false,
   autoComplete,
-}: FormFieldProps) {
+}: InputFieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      <FormLabel id={id}  required={required} >
         {label}
-        {required && (
-          <span className="text-red-500 ml-1 text-lg" aria-label="必須項目">
-            *
-          </span>
-        )}
-      </label>
+      </FormLabel>
       <Input
         id={id}
         type={type}

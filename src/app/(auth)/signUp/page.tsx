@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/elements/button'
-import { FormField } from '@/components/elements/form-field'
+import { InputField } from '@/components/elements/fields/input-field'
 import type { ActionState } from '@/types/form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -38,36 +38,40 @@ export default function SignUpPage() {
 
         <form className="mt-6 space-y-6" action={action}>
           <div className="space-y-4">
-            <FormField
+            <InputField
               id="name"
               label="お名前"
               placeholder="お名前を入力"
               defaultValue={state?.values?.name}
               errors={state?.error?.fields?.name}
+              required
             />
-            <FormField
+            <InputField
               id="email"
               label="メールアドレス"
               type="email"
               placeholder="メールアドレスを入力"
               defaultValue={state?.values?.email}
               errors={state?.error?.fields?.email}
+              required
             />
-            <FormField
+            <InputField
               id="password"
               label="パスワード"
               type="password"
               placeholder="パスワードを入力"
               defaultValue={state?.values?.password}
               errors={state?.error?.fields?.password}
+              required
             />
-            <FormField
+            <InputField
               id="confirmPassword"
               label="パスワード（確認用）"
               type="password"
               placeholder="パスワードを再入力"
               defaultValue={state?.values?.confirmPassword}
               errors={state?.error?.fields?.confirmPassword}
+              required
             />
           </div>
 
