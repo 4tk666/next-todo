@@ -18,8 +18,11 @@ jobs:
         with:
           node-version: '20' # nodeのバージョン20を指定
 
+      - name: Enable Corepack
+        run: corepack enable # pnpmを使用するためにCorepackを有効化
+
       - name: Install dependencies
-        run: yarn install # 依存関係をインストール
+        run: pnpm install --frozen-lockfile # 依存関係をインストール
 
       - name: Run database migrations
         run: npx prisma migrate deploy
@@ -28,7 +31,7 @@ jobs:
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
 
       - name: Build Next.js project
-        run: yarn build # ビルドする
+        run: pnpm build # ビルドする
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25 # Vercelにデプロイする。
