@@ -11,6 +11,7 @@ import { TODO_PRIORITY_LABELS } from '@/constants/todo-priority'
 
 type TodoItemProps = {
   todo: TodoDTO
+  todosDto: TodoDTO[]
   isExpanded?: boolean
   hasChildren?: boolean
   isChildrenTodo?: boolean
@@ -19,6 +20,7 @@ type TodoItemProps = {
 
 export function TodoItem({
   todo,
+  todosDto,
   isExpanded = false,
   hasChildren = false,
   isChildrenTodo = false,
@@ -124,7 +126,7 @@ export function TodoItem({
       <td
         className={clsx('p-3 w-12', 'text-right', 'border-r border-gray-200')}
       >
-        <TodoUpdate todo={todo} setIsChecked={setIsChecked}>
+        <TodoUpdate todo={todo} todosDto={todosDto} setIsChecked={setIsChecked}>
           <div
             className={clsx(
               'p-1',

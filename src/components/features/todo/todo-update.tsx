@@ -8,6 +8,7 @@ import { TodoUpdateForm } from './todo-update-form'
 type TodoUpdateProps = {
   /** 編集対象のTodo */
   todo: TodoDTO
+  todosDto: TodoDTO[]
   /** 編集ボタンとして表示する子要素 */
   children: React.ReactNode
   setIsChecked: (isChecked: boolean) => void
@@ -19,6 +20,7 @@ type TodoUpdateProps = {
  */
 export function TodoUpdate({
   todo,
+  todosDto,
   children,
   setIsChecked,
 }: TodoUpdateProps) {
@@ -46,6 +48,7 @@ export function TodoUpdate({
         >
           <TodoUpdateForm
             todo={todo}
+            todosDto={todosDto}
             onSuccess={closeForm}
             onCancel={closeForm}
             setIsChecked={setIsChecked}
