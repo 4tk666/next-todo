@@ -40,7 +40,7 @@ export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
   )
 
   return (
-    <form action={action} className="space-y-6">
+    <form action={action} className="space-y-6 text-left">
       {/* 全体エラーメッセージ */}
       {state?.error && <FormError errors={[state.error.message]} />}
 

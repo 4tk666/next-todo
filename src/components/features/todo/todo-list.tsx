@@ -29,6 +29,7 @@ export default function TodoList({ todosDto }: TodoListProps) {
           <tr className="group border-b border-gray-200">
             <TodoItem
               todo={todo}
+              todosDto={todosDto}
               hasChildren={hasChildren}
               handleToggleExpansion={(todoId) =>
                 setExpandedTodoIds((previousIds) =>
@@ -42,7 +43,7 @@ export default function TodoList({ todosDto }: TodoListProps) {
             isExpanded &&
             todo.children.map((child) => (
               <tr key={child.id} className="group border-b border-gray-200">
-                <TodoItem todo={child} isChildrenTodo />
+                <TodoItem todo={child} todosDto={todosDto} isChildrenTodo />
               </tr>
             ))}
         </Fragment>
