@@ -24,36 +24,36 @@ export async function updateTodoAction({
 }: { formData: FormData; todo: TodoDTO }): Promise<
   UpdateActionState<void, UpdateTodoFormValues>
 > {
-  // セッション認証チェック
-  const sessionResult = await getSessionUserIdOrError()
-
-  if (!sessionResult.success) return sessionResult
-
-  const values = {
-    id: todo.id,
-    isComplete: formData.get('isComplete') === 'on',
-    title: formData.get('title'),
-    description: formData.get('description'),
-    dueDate: formData.get('dueDate'),
-    priority: formData.get('priority'),
-    parentId: formData.get('parentId'),
-  }
-
-  // バリデーション
-  const validatedFields = updateTodoSchema.safeParse(values)
-
-  if (!validatedFields.success) {
-    return {
-      success: false,
-      error: {
-        message: '入力内容に誤りがあります',
-        fields: validatedFields.error.flatten().fieldErrors,
-      },
-      values: validatedFields.data,
-    }
-  }
-
   try {
+    // セッション認証チェック
+    const sessionResult = await getSessionUserIdOrError()
+
+    if (!sessionResult.success) return sessionResult
+
+    const values = {
+      id: todo.id,
+      isComplete: formData.get('isComplete') === 'on',
+      title: formData.get('title'),
+      description: formData.get('description'),
+      dueDate: formData.get('dueDate'),
+      priority: formData.get('priority'),
+      parentId: formData.get('parentId'),
+    }
+
+    // バリデーション
+    const validatedFields = updateTodoSchema.safeParse(values)
+
+    if (!validatedFields.success) {
+      return {
+        success: false,
+        error: {
+          message: '入力内容に誤りがあります',
+          fields: validatedFields.error.flatten().fieldErrors,
+        },
+        values: validatedFields.data,
+      }
+    }
+
     // Todoの存在確認と所有者チェック
     const ownershipErrorResult = await validateTodoOwnership(todo.id)
     if (!ownershipErrorResult.success) return ownershipErrorResult
@@ -91,7 +91,6 @@ export async function updateTodoAction({
       error: {
         message: 'タスクの更新に失敗しました',
       },
-      values: validatedFields.data,
     }
   }
 }
