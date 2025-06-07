@@ -20,6 +20,7 @@ import { FormError } from '../../elements/form-error'
 import { Input } from '../../elements/input'
 import type { UpdateTodoFormValues } from '@/lib/schemas/todos/todo-update-schema'
 import { formatDateToString } from '@/lib/utils/date-utils'
+import { ErrorBanner } from '@/components/elements/error-banner'
 
 type TodoUpdateFormProps = {
   /** 編集対象のTodo */
@@ -67,7 +68,7 @@ export function TodoUpdateForm({
   return (
     <form action={action} className="space-y-6 text-left">
       {/* 全体エラーメッセージ */}
-      {state?.error && <FormError errors={[state.error.message]} />}
+      {state?.error && <ErrorBanner message={state.error.message} />}
       {/* 完了状態チェックボックス */}
       <div className="flex items-center">
         <Checkbox

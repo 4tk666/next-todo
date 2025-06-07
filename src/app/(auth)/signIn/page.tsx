@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/elements/button'
+import { ErrorBanner } from '@/components/elements/error-banner'
 import { InputField } from '@/components/elements/fields/input-field'
 import type { ActionState } from '@/types/form'
 import Link from 'next/link'
@@ -31,9 +32,7 @@ export default function SignInPage() {
         </div>
 
         {state?.error && (
-          <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {state.error.message}
-          </div>
+          <ErrorBanner message={state.error.message} />
         )}
 
         <form className="mt-6 space-y-6" action={action}>
