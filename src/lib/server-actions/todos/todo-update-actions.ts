@@ -10,6 +10,8 @@ import {
 } from '@/lib/schemas/todos/todo-update-schema'
 import type { ActionState, UpdateActionState } from '@/types/form'
 import { revalidatePath } from 'next/cache'
+import { getSessionUserIdOrError } from '../shared/auth-helpers'
+import { validateTodoOwnership } from '../shared/todo-helpers'
 
 /**
  * Todoを更新するサーバーアクション
@@ -22,15 +24,10 @@ export async function updateTodoAction({
 }: { formData: FormData; todo: TodoDTO }): Promise<
   UpdateActionState<void, UpdateTodoFormValues>
 > {
-  const session = await auth()
-  if (!session?.user?.id) {
-    return {
-      success: false,
-      error: {
-        message: 'ログインが必要です',
-      },
-    }
-  }
+  // セッション認証チェック
+  const sessionResult = await getSessionUserIdOrError()
+
+  if (!sessionResult.success) return sessionResult
 
   const values = {
     id: todo.id,
@@ -57,26 +54,12 @@ export async function updateTodoAction({
   }
 
   try {
+    // Todoの存在確認と所有者チェック
+    const ownershipErrorResult = await validateTodoOwnership(todo.id)
+    if (!ownershipErrorResult.success) return ownershipErrorResult
+
     const { id, title, description, isComplete, dueDate, priority, parentId } =
       validatedFields.data
-
-    // Todoの存在確認と所有者チェック
-    const existingTodo = await prisma.todo.findFirst({
-      where: {
-        id,
-        userId: session.user.id,
-      },
-    })
-
-    if (!existingTodo) {
-      return {
-        success: false,
-        error: {
-          message: 'タスクが見つかりません',
-        },
-        values: validatedFields.data,
-      }
-    }
 
     // Todoを更新
     await prisma.todo.update({
@@ -85,10 +68,10 @@ export async function updateTodoAction({
       },
       data: {
         title,
-        description: description,
+        description,
         isComplete,
-        dueDate: dueDate,
-        priority: priority,
+        dueDate,
+        priority,
         parentId:
           parentId === DEFAULT_VALUES.UNSELECTED_STRING ? null : parentId,
         updatedAt: new Date(),
