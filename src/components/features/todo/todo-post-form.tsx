@@ -16,6 +16,7 @@ import {
 } from '@/constants/todo-priority'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { DEFAULT_VALUES } from '@/constants/default-values'
+import { ErrorBanner } from '@/components/elements/error-banner'
 
 type TodoFormProps = {
   todosDto: TodoDTO[]
@@ -42,7 +43,7 @@ export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
   return (
     <form action={action} className="space-y-6 text-left">
       {/* 全体エラーメッセージ */}
-      {state?.error && <FormError errors={[state.error.message]} />}
+      {state?.error && <ErrorBanner message={state.error.message} />}
 
       <div>
         <label

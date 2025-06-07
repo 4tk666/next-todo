@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
 import { signUpAction } from '../../../lib/server-actions/auth/sign-up-actions'
+import { ErrorBanner } from '@/components/elements/error-banner'
 
 export default function SignUpPage() {
   const router = useRouter()
@@ -30,11 +31,7 @@ export default function SignUpPage() {
           </h2>
         </div>
 
-        {state?.error && (
-          <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {state.error.message}
-          </div>
-        )}
+        {state?.error && <ErrorBanner message={state.error.message} />}
 
         <form className="mt-6 space-y-6" action={action}>
           <div className="space-y-4">
