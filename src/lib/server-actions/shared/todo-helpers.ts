@@ -46,7 +46,7 @@ export async function validateTodoOwnership(
 export async function validateParentId(
   parentId: string | null,
 ): Promise<{ success: false; errorMessage: string } | { success: true }> {
-  if (!parentId || parentId !== DEFAULT_VALUES.UNSELECTED_STRING) {
+  if (!parentId || parentId === DEFAULT_VALUES.UNSELECTED_STRING) {
     return {
       success: true,
     }
