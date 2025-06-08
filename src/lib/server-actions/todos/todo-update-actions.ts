@@ -11,7 +11,7 @@ import {
 import type { ActionState, UpdateActionState } from '@/types/form'
 import { revalidatePath } from 'next/cache'
 import { getSessionUserIdOrError } from '../shared/auth-helpers'
-import { validateTodoOwnership } from '../shared/todo-helpers'
+import { validateParentId, validateTodoOwnership } from '../shared/todo-helpers'
 
 /**
  * Todoを更新するサーバーアクション
@@ -54,13 +54,18 @@ export async function updateTodoAction({
       }
     }
 
-    // Todoの存在確認と所有者チェック
-    const ownershipErrorResult = await validateTodoOwnership(todo.id)
-    if (!ownershipErrorResult.success) return ownershipErrorResult
-
-    const { id, title, description, isComplete, dueDate, priority, parentId } =
+        const { id, title, description, isComplete, dueDate, priority, parentId } =
       validatedFields.data
 
+    // Todoの存在確認と所有者チェック
+    const ownershipErrorResult = await validateTodoOwnership(id)
+    if (!ownershipErrorResult.success) return ownershipErrorResult
+
+    // 親TodoのIDが指定されている場合、存在確認
+    const parentIdErrorResult = await validateParentId(parentId)
+    if (!parentIdErrorResult.success) return parentIdErrorResult
+
+    
     // Todoを更新
     await prisma.todo.update({
       where: {
