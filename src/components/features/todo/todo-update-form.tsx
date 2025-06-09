@@ -21,6 +21,7 @@ import { Input } from '../../elements/input'
 import type { UpdateTodoFormValues } from '@/lib/schemas/todos/todo-update-schema'
 import { formatDateToString } from '@/lib/utils/date-utils'
 import { ErrorBanner } from '@/components/elements/error-banner'
+import { toast } from 'sonner'
 
 type TodoUpdateFormProps = {
   /** 編集対象のTodo */
@@ -58,6 +59,7 @@ export function TodoUpdateForm({
         // 成功時のコールバック
         onSuccess()
         setIsChecked(isLocalChecked)
+        toast.success('タスクを更新しました')
       }
 
       return result
