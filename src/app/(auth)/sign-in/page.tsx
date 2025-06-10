@@ -31,9 +31,7 @@ export default function SignInPage() {
           </h2>
         </div>
 
-        {state?.error && (
-          <ErrorBanner message={state.error.message} />
-        )}
+        {state?.error && <ErrorBanner message={state.error.message} />}
 
         <form className="mt-6 space-y-6" action={action}>
           <div className="space-y-4">
@@ -64,7 +62,7 @@ export default function SignInPage() {
           <div className="mt-4 text-center text-sm text-gray-600">
             アカウントをお持ちでないですか？{' '}
             <Link
-              href="/signUp"
+              href="/sign-up"
               className="font-medium text-indigo-600 hover:text-indigo-500"
             >
               新規登録

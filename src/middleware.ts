@@ -4,8 +4,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // 認証なしでもアクセス可能なパス
-const publicPaths = ['/', '/signIn', '/signUp']
-
+const publicPaths = ['/', '/sign-in', '/sign-up']
 
 const isPublicPath = (path: string) => publicPaths.includes(path)
 
@@ -21,7 +20,7 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
 
   // 認証済みでログインページにアクセスした場合はリダイレクト
-  if (!!session && (path === '/signIn' || path === '/signUp')) {
+  if (!!session && (path === '/sign-in' || path === '/sign-up')) {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, request.url))
   }
   // 認証不要パスの場合はそのまま続行
