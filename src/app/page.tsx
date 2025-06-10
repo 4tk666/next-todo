@@ -22,10 +22,10 @@ export default async function Home() {
           <div>
             <p className="mb-4">ログインしてTodoリストを管理しましょう。</p>
             <div className="flex space-x-4">
-              <LinkButton href="/signIn" variant="outline">
+              <LinkButton href="/sign-in" variant="outline">
                 ログイン
               </LinkButton>
-              <LinkButton href="/signUp" variant="primary">
+              <LinkButton href="/sign-up" variant="primary">
                 新規登録
               </LinkButton>
             </div>
