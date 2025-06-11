@@ -38,7 +38,7 @@ export async function signInAction(formData: FormData): Promise<ActionState> {
       return {
         success: false,
         error: {
-          message:'ユーザー名またはパスワードが正しくありません'
+          message: 'ユーザー名またはパスワードが正しくありません',
         },
         values, // 入力値を返す（パスワードは消さない）
       }
@@ -57,4 +57,8 @@ export async function signInAction(formData: FormData): Promise<ActionState> {
       values, // 入力値を返す
     }
   }
+}
+
+export async function signInGithubAction() {
+  await signIn('githu')
 }
