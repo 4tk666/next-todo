@@ -3,20 +3,28 @@
 import { Button } from '@/components/elements/button'
 import { ErrorBanner } from '@/components/elements/error-banner'
 import { InputField } from '@/components/elements/fields/input-field'
+import { GitHubSignInButton } from '@/components/features/auth/github-sign-in-button'
 import type { ActionState } from '@/types/form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
-import { signInAction } from '../../../lib/server-actions/auth/sign-in-actions'
+import {
+  signInAction,
+  signInGithubAction,
+} from '../../../lib/server-actions/auth/sign-in-actions'
+import { toast } from 'sonner'
 
 export default function SignInPage() {
   const router = useRouter()
 
+  // 通常認証の状態管理（バリデーションエラー表示のため）
   const [state, action, isPending] = useActionState(
     async (state: ActionState | undefined, formData: FormData) => {
       const result = await signInAction(formData)
-      if (result.success) router.push('/')
-
+      if (result.success) {
+        toast.success('サインインしました')
+        router.push('/')
+      }
       return result
     },
     undefined,
@@ -32,8 +40,26 @@ export default function SignInPage() {
         </div>
 
         {state?.error && <ErrorBanner message={state.error.message} />}
+        
 
-        <form className="mt-6 space-y-6" action={action}>
+        {/* GitHub認証ボタン */}
+        <form action={signInGithubAction} className="mt-6">
+          <GitHubSignInButton />
+        </form>
+
+        {/* 区切り線 */}
+        <div className="mt-6 mb-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">または</span>
+            </div>
+          </div>
+        </div>
+
+        <form className="space-y-6" action={action}>
           <div className="space-y-4">
             <InputField
               id="username"

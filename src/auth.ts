@@ -3,6 +3,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import NextAuth, { type User, type NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { comparePassword } from './lib/utils/auth-utils'
+import Github from 'next-auth/providers/github'
 
 // 認証APIのベースパス
 export const BASE_PATH = '/api/auth'
@@ -12,6 +13,18 @@ const authOptions: NextAuthConfig = {
   session: {
     strategy: 'jwt',
   },
+pages: {
+  // NextAuth.jsのデフォルトサインインページ（/api/auth/signin）を
+  // カスタムサインインページ（/sign-in）にリダイレクトする設定
+  // これにより、アプリケーションの統一されたデザインでサインイン画面を提供
+  signIn: '/sign-in',
+  
+  // 認証エラー発生時のリダイレクト先を指定
+  // GitHub OAuth認証失敗やその他の認証エラーが発生した場合、
+  // デフォルトのエラーページではなく、サインインページにリダイレクトして
+  // エラーメッセージを表示する（URLパラメータ経由でエラー情報を受け取る）
+  error: '/sign-in',
+},
   callbacks: {
     async jwt({ token, user }) {
       // ログイン成功
@@ -38,6 +51,10 @@ const authOptions: NextAuthConfig = {
     },
   },
   providers: [
+    Github({
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    }),
     Credentials({
       name: 'Credentials',
       // 認証処理
@@ -62,7 +79,7 @@ const authOptions: NextAuthConfig = {
           // パスワードの検証
           const isValid = await comparePassword(
             credentials.password as string,
-            user.password
+            user.password,
           )
 
           if (!isValid) {
