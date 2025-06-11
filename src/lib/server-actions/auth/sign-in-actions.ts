@@ -60,5 +60,5 @@ export async function signInAction(formData: FormData): Promise<ActionState> {
 }
 
 export async function signInGithubAction() {
-  await signIn('githu')
+  await signIn('github')
 }
