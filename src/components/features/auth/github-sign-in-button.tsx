@@ -8,6 +8,7 @@ import { Button } from '@/components/elements/button'
 /**
  * GitHub認証ボタンコンポーネント
  * useFormStatusでローディング状態を自動管理
+ * エラー表示は別コンポーネント（GitHubSignInError）で処理
  */
 export function GitHubSignInButton() {
   const { pending } = useFormStatus()
