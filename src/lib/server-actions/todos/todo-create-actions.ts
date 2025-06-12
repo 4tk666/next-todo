@@ -3,33 +3,14 @@
 import { auth } from '@/auth'
 import { DEFAULT_VALUES } from '@/constants/default-values'
 import { prisma } from '@/lib/prisma'
-import { createTodoSchema } from '@/lib/schemas/todos/todo-create-schema'
+import {
+  type CreateTodoFormValues,
+  createTodoSchema,
+} from '@/lib/schemas/todos/todo-create-schema'
 import type { ActionState } from '@/types/form'
 import { revalidatePath } from 'next/cache'
-
-/**
- * 指定されたparentIdが有効かどうかを確認する
- * @param parentId 親TodoのID
- * @returns 有効な場合はtrue、無効な場合はfalse
- */
-async function validateParentId(parentId: string): Promise<boolean> {
-  const session = await auth()
-  if (!session?.user?.id) return false
-
-  const parentTodo = await prisma.todo.findFirst({
-    where: {
-      id: parentId,
-      userId: session.user.id,
-    },
-    // パフォーマンス最適化のため、必要最小限のフィールド（IDのみ）を取得
-    select: {
-      id: true,
-    },
-  })
-
-  return !!parentTodo
-}
-
+import { getSessionUserIdOrError } from '../shared/auth-helpers'
+import { validateParentId } from '../shared/todo-helpers'
 /**
  * タスクを新規作成するサーバーアクション（useActionState対応版）
  * @param prevState - 前の状態
@@ -38,79 +19,63 @@ async function validateParentId(parentId: string): Promise<boolean> {
  */
 export async function createTodoAction(
   formData: FormData,
-): Promise<ActionState> {
-  // セッションチェック
-  const session = await auth()
-  if (!session?.user?.id) {
-    return {
-      success: false,
-      error: {
-        message: '認証されていません。再度ログインしてください。',
-      },
+): Promise<ActionState<void, CreateTodoFormValues>> {
+  try {
+    // セッション認証チェック
+    const sessionResult = await getSessionUserIdOrError()
+
+    if (!sessionResult.success) return sessionResult
+    const userId = sessionResult.userId
+
+    // 入力値を保持（エラー時の再表示用）
+    const values = {
+      title: String(formData.get('title') ?? ''),
+      description: formData.get('description')
+        ? String(formData.get('description'))
+        : null,
+      dueDate: formData.get('dueDate')
+        ? new Date(formData.get('dueDate')?.toString() ?? '')
+        : null,
+      priority: formData.get('priority')
+        ? Number(String(formData.get('priority')))
+        : null,
+      parentId: formData.get('parentId')
+        ? String(formData.get('parentId'))
+        : null,
     }
-  }
 
-  // 入力値を保持（エラー時の再表示用）
-  const values = {
-    title: formData.get('title') as string,
-    description: formData.get('description') as string,
-    dueDate: formData.get('dueDate') as string,
-    priority: formData.get('priority') as string,
-    parentId: formData.get('parentId') as string,
-  }
+    // バリデーション（safeParse使用）
+    const validationResult = createTodoSchema.safeParse(values)
 
-  // バリデーション（safeParse使用）
-  const validationResult = createTodoSchema.safeParse(values)
-
-  if (!validationResult.success) {
-    const errors = validationResult.error.flatten().fieldErrors
-    return {
-      success: false,
-      error: {
-        message: 'バリデーションエラーが発生しました',
-        fields: errors,
-      },
-      values,
-    }
-  }
-
-  if (
-    validationResult.data.parentId &&
-    validationResult.data.parentId !== DEFAULT_VALUES.UNSELECTED_STRING
-  ) {
-    const isValidParentId = await validateParentId(
-      validationResult.data.parentId,
-    )
-
-    if (!isValidParentId) {
+    if (!validationResult.success) {
+      const errors = validationResult.error.flatten().fieldErrors
       return {
         success: false,
         error: {
-          message: '指定された親タスクが見つかりません。',
-          fields: {
-            parentId: [
-              '選択された親タスクは存在しないか、アクセス権限がありません。',
-            ],
-          },
+          message: 'バリデーションエラーが発生しました',
+          fields: errors,
         },
         values,
       }
     }
-  }
 
-  try {
+    const { title, description, dueDate, priority, parentId } =
+      validationResult.data
+
+    // 親TodoのIDが指定されている場合、存在確認
+    const parentIdErrorResult = await validateParentId(parentId)
+    if (!parentIdErrorResult.success) return parentIdErrorResult
+
     // データベースに保存（バリデーション済みデータを使用）
     await prisma.todo.create({
       data: {
-        title: validationResult.data.title,
-        description: validationResult.data.description,
-        dueDate: validationResult.data.dueDate,
-        priority: validationResult.data.priority,
+        title,
+        description,
+        dueDate,
+        priority,
         parentId:
-          validationResult.data.parentId === DEFAULT_VALUES.UNSELECTED_STRING
-            ? null
-            : validationResult.data.parentId,
-        userId: session.user.id,
+          parentId === DEFAULT_VALUES.UNSELECTED_STRING ? null : parentId,
+        userId,
       },
     })
 
@@ -126,8 +91,7 @@ export async function createTodoAction(
       success: false,
       error: {
         message: 'タスクの作成に失敗しました。もう一度お試しください。',
-      },
-      values,
+      }
     }
   }
 }

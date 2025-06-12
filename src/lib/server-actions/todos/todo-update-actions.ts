@@ -7,7 +7,7 @@ import {
   type UpdateTodoFormValues,
   updateTodoSchema,
 } from '@/lib/schemas/todos/todo-update-schema'
-import type { ActionState, UpdateActionState } from '@/types/form'
+import type { ActionState } from '@/types/form'
 import { revalidatePath } from 'next/cache'
 import { getSessionUserIdOrError } from '../shared/auth-helpers'
 import { validateParentId, validateTodoOwnership } from '../shared/todo-helpers'
@@ -21,7 +21,7 @@ export async function updateTodoAction({
   formData,
   todo,
 }: { formData: FormData; todo: TodoDTO }): Promise<
-  UpdateActionState<void, UpdateTodoFormValues>
+  ActionState<void, UpdateTodoFormValues>
 > {
   try {
     // セッション認証チェック

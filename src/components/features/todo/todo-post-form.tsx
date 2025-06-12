@@ -17,6 +17,9 @@ import {
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { DEFAULT_VALUES } from '@/constants/default-values'
 import { ErrorBanner } from '@/components/elements/error-banner'
+import type { CreateTodoFormValues } from '@/lib/schemas/todos/todo-create-schema'
+import { formatDateToString } from '@/lib/utils/date-utils'
+import { toast } from 'sonner'
 
 type TodoFormProps = {
   todosDto: TodoDTO[]
@@ -29,12 +32,20 @@ type TodoFormProps = {
  */
 export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
   const [state, action, isPending] = useActionState(
-    async (prevState: ActionState | undefined, formData: FormData) => {
+    async (
+      prevState: ActionState<void, CreateTodoFormValues> | undefined,
+      formData: FormData,
+    ) => {
       const result = await createTodoAction(formData)
       if (result.success) {
         // 成功時のコールバック
         onSuccess()
+        toast.success('タスクを作成しました')
+      } else {
+        // エラー時のコールバック
+        toast.error(result.error?.message || 'タスクの更新に失敗しました')
       }
+
       return result
     },
     undefined,
@@ -71,7 +82,7 @@ export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
           placeholder="タスクの詳細を入力"
           rows={5}
           disabled={isPending}
-          defaultValue={state?.values?.description}
+          defaultValue={state?.values?.description ?? ''}
           errors={state?.error?.fields?.description}
         />
       </div>
@@ -82,7 +93,13 @@ export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
           name="dueDate"
           label="期日"
           disabled={isPending}
-          defaultValue={state?.values?.dueDate}
+          defaultValue={
+            state?.values?.dueDate
+              ? formatDateToString({
+                  date: state.values.dueDate,
+                })
+              : undefined
+          }
           errors={state?.error?.fields?.dueDate}
         />
       </div>
@@ -115,11 +132,6 @@ export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
           }
           disabled={isPending}
         />
-        <input
-          type="hidden"
-          name="priority"
-          value={state?.values?.priority ?? ''}
-        />
       </div>
 
       <div>
@@ -150,11 +162,6 @@ export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
             state?.values?.parentId ?? DEFAULT_VALUES.UNSELECTED_STRING
           }
           disabled={isPending}
-        />
-        <input
-          type="hidden"
-          name="parentId"
-          value={state?.values?.parentId ?? DEFAULT_VALUES.UNSELECTED_STRING}
         />
         <FormError id="parentId" errors={state?.error?.fields?.parentId} />
       </div>
