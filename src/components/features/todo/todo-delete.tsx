@@ -6,6 +6,7 @@ import { deleteTodoAction } from '@/lib/server-actions/todos/todo-delete-actions
 import { clsx } from 'clsx'
 import { useState, useTransition } from 'react'
 import { IoTrash } from 'react-icons/io5'
+import { toast } from 'sonner'
 
 type TodoDeleteProps = {
   /** 削除対象のTodoデータ */
@@ -47,6 +48,7 @@ export function TodoDelete({ todo }: TodoDeleteProps) {
         <ConfirmationDialog
           title="タスクを削除"
           message={`「${todo.title}」を削除しますか？\nこの操作は取り消すことができません。`}
+          desc='※親タスクを削除すると、タスクとその子タスクもすべて削除されます。'
           confirmText="削除"
           cancelText="キャンセル"
           onConfirm={() => {
@@ -57,10 +59,19 @@ export function TodoDelete({ todo }: TodoDeleteProps) {
 
                 if (result.success) {
                   setIsDialogOpen(false)
+                  toast.success('タスクを削除しました')
+                } else {
+                  // エラーが発生した場合の処理
+                  toast.error(
+                    result.error?.message || 'タスクの削除に失敗しました',
+                  )
                 }
               } catch (error) {
                 // 予期しないエラーが発生した場合の処理
                 console.error('Todo削除中にエラーが発生しました:', error)
+                toast.error(
+                  '例外が発生しました。タスクを削除できませんでした。',
+                )
               }
             })
           }}

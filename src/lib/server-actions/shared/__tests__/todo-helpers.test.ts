@@ -1,11 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { validateTodoOwnership, validateParentId } from '../todo-helpers'
+import {
+  validateTodoOwnership,
+  validateParentId,
+  deleteTodoWithValidation,
+} from '../todo-helpers'
 
 // Prismaクライアントのモック
 vi.mock('@/lib/prisma', () => ({
   prisma: {
     todo: {
       findFirst: vi.fn(),
+      deleteMany: vi.fn(),
     },
   },
 }))
@@ -22,9 +27,12 @@ import { getSessionUserIdOrError } from '../auth-helpers'
 const mockPrisma = prisma as unknown as {
   todo: {
     findFirst: ReturnType<typeof vi.fn>
+    deleteMany: ReturnType<typeof vi.fn>
   }
 }
-const mockGetSessionUserIdOrError = getSessionUserIdOrError as ReturnType<typeof vi.fn>
+const mockGetSessionUserIdOrError = getSessionUserIdOrError as ReturnType<
+  typeof vi.fn
+>
 
 describe('Todo関連ヘルパー関数のテスト', () => {
   beforeEach(() => {
@@ -177,7 +185,9 @@ describe('Todo関連ヘルパー関数のテスト', () => {
       mockPrisma.todo.findFirst.mockRejectedValue(dbError)
 
       // エラーが投げられることを確認
-      await expect(validateTodoOwnership(mockTodoId)).rejects.toThrow('データベース接続エラー')
+      await expect(validateTodoOwnership(mockTodoId)).rejects.toThrow(
+        'データベース接続エラー',
+      )
     })
   })
 
@@ -212,7 +222,6 @@ describe('Todo関連ヘルパー関数のテスト', () => {
       expect(mockPrisma.todo.findFirst).not.toHaveBeenCalled()
     })
 
-
     it('親Todoが存在しない場合はエラーメッセージを返すこと', async () => {
       // 認証ヘルパーが成功を返すように設定
       mockGetSessionUserIdOrError.mockResolvedValue({
@@ -227,7 +236,8 @@ describe('Todo関連ヘルパー関数のテスト', () => {
 
       expect(result).toEqual({
         success: false,
-        errorMessage: '選択された親タスクは存在しないか、アクセス権限がありません。',
+        errorMessage:
+          '選択された親タスクは存在しないか、アクセス権限がありません。',
       })
       expect(mockPrisma.todo.findFirst).toHaveBeenCalledWith({
         where: {
@@ -282,7 +292,8 @@ describe('Todo関連ヘルパー関数のテスト', () => {
 
       expect(result).toEqual({
         success: false,
-        errorMessage: '選択された親タスクは存在しないか、アクセス権限がありません。',
+        errorMessage:
+          '選択された親タスクは存在しないか、アクセス権限がありません。',
       })
       expect(mockPrisma.todo.findFirst).toHaveBeenCalledWith({
         where: {
@@ -293,6 +304,184 @@ describe('Todo関連ヘルパー関数のテスト', () => {
           id: true,
         },
       })
+    })
+  })
+
+  describe('deleteTodoWithValidation', () => {
+    const mockTodoId = 'test-todo-id'
+    const mockUserId = 'test-user-id'
+
+    it('認証エラーの場合は認証エラーメッセージを返すこと', async () => {
+      // 認証ヘルパーが失敗を返すように設定
+      mockGetSessionUserIdOrError.mockResolvedValue({
+        success: false,
+        errorMessage: 'ログインが必要です',
+      })
+
+      const result = await deleteTodoWithValidation(mockTodoId)
+
+      expect(result).toEqual({
+        success: false,
+        errorMessage: 'ログインが必要です',
+      })
+      expect(mockGetSessionUserIdOrError).toHaveBeenCalledOnce()
+      // Prismaの削除処理は実行されないはず
+      expect(mockPrisma.todo.deleteMany).not.toHaveBeenCalled()
+    })
+
+    it('Todoが存在しない場合はエラーメッセージを返すこと', async () => {
+      // 認証ヘルパーが成功を返すように設定
+      mockGetSessionUserIdOrError.mockResolvedValue({
+        success: true,
+        userId: mockUserId,
+      })
+
+      // Prismaが削除件数0を返すように設定（Todoが見つからない）
+      mockPrisma.todo.deleteMany.mockResolvedValue({ count: 0 })
+
+      const result = await deleteTodoWithValidation(mockTodoId)
+
+      expect(result).toEqual({
+        success: false,
+        errorMessage: '指定されたTodoが存在しないか、削除する権限がありません',
+      })
+      expect(mockPrisma.todo.deleteMany).toHaveBeenCalledWith({
+        where: {
+          id: mockTodoId,
+          userId: mockUserId,
+        },
+      })
+    })
+
+    it('Todoが存在し、所有者が一致する場合は削除に成功すること', async () => {
+      // 認証ヘルパーが成功を返すように設定
+      mockGetSessionUserIdOrError.mockResolvedValue({
+        success: true,
+        userId: mockUserId,
+      })
+
+      // Prismaが削除件数1を返すように設定（削除成功）
+      mockPrisma.todo.deleteMany.mockResolvedValue({ count: 1 })
+
+      const result = await deleteTodoWithValidation(mockTodoId)
+
+      expect(result).toEqual({ success: true })
+      expect(mockPrisma.todo.deleteMany).toHaveBeenCalledWith({
+        where: {
+          id: mockTodoId,
+          userId: mockUserId,
+        },
+      })
+    })
+
+    it('異なるユーザーのTodoを削除しようとした場合はエラーを返すこと', async () => {
+      // 認証ヘルパーが成功を返すように設定
+      mockGetSessionUserIdOrError.mockResolvedValue({
+        success: true,
+        userId: mockUserId,
+      })
+
+      // Prismaが削除件数0を返すように設定（異なるユーザーのTodoなので削除されない）
+      mockPrisma.todo.deleteMany.mockResolvedValue({ count: 0 })
+
+      const result = await deleteTodoWithValidation(mockTodoId)
+
+      expect(result).toEqual({
+        success: false,
+        errorMessage: '指定されたTodoが存在しないか、削除する権限がありません',
+      })
+      expect(mockPrisma.todo.deleteMany).toHaveBeenCalledWith({
+        where: {
+          id: mockTodoId,
+          userId: mockUserId, // 認証されたユーザーのIDでクエリされる
+        },
+      })
+    })
+
+    it('空文字列のTodoIDが渡された場合でも適切に処理されること', async () => {
+      const emptyTodoId = ''
+
+      // 認証ヘルパーが成功を返すように設定
+      mockGetSessionUserIdOrError.mockResolvedValue({
+        success: true,
+        userId: mockUserId,
+      })
+
+      // Prismaが削除件数0を返すように設定
+      mockPrisma.todo.deleteMany.mockResolvedValue({ count: 0 })
+
+      const result = await deleteTodoWithValidation(emptyTodoId)
+
+      expect(result).toEqual({
+        success: false,
+        errorMessage: '指定されたTodoが存在しないか、削除する権限がありません',
+      })
+      expect(mockPrisma.todo.deleteMany).toHaveBeenCalledWith({
+        where: {
+          id: emptyTodoId,
+          userId: mockUserId,
+        },
+      })
+    })
+
+    it('削除処理で複数のレコードが削除された場合でも成功を返すこと', async () => {
+      // 認証ヘルパーが成功を返すように設定
+      mockGetSessionUserIdOrError.mockResolvedValue({
+        success: true,
+        userId: mockUserId,
+      })
+
+      // Prismaが削除件数2を返すように設定（稀なケースだが、複数削除された場合）
+      mockPrisma.todo.deleteMany.mockResolvedValue({ count: 2 })
+
+      const result = await deleteTodoWithValidation(mockTodoId)
+
+      expect(result).toEqual({ success: true })
+      expect(mockPrisma.todo.deleteMany).toHaveBeenCalledWith({
+        where: {
+          id: mockTodoId,
+          userId: mockUserId,
+        },
+      })
+    })
+
+    it('Prismaエラーが発生した場合は例外が投げられること', async () => {
+      // 認証ヘルパーが成功を返すように設定
+      mockGetSessionUserIdOrError.mockResolvedValue({
+        success: true,
+        userId: mockUserId,
+      })
+
+      // Prismaがエラーを投げるように設定
+      const dbError = new Error('データベース接続エラー')
+      mockPrisma.todo.deleteMany.mockRejectedValue(dbError)
+
+      // エラーが投げられることを確認
+      await expect(deleteTodoWithValidation(mockTodoId)).rejects.toThrow(
+        'データベース接続エラー',
+      )
+
+      expect(mockPrisma.todo.deleteMany).toHaveBeenCalledWith({
+        where: {
+          id: mockTodoId,
+          userId: mockUserId,
+        },
+      })
+    })
+
+    it('認証チェックでデータベースエラーが発生した場合は例外が投げられること', async () => {
+      // 認証ヘルパーがエラーを投げるように設定
+      const authError = new Error('認証処理エラー')
+      mockGetSessionUserIdOrError.mockRejectedValue(authError)
+
+      // エラーが投げられることを確認
+      await expect(deleteTodoWithValidation(mockTodoId)).rejects.toThrow(
+        '認証処理エラー',
+      )
+
+      expect(mockGetSessionUserIdOrError).toHaveBeenCalledOnce()
+      // Prismaの削除処理は実行されないはず
+      expect(mockPrisma.todo.deleteMany).not.toHaveBeenCalled()
     })
   })
 })
