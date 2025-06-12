@@ -1,41 +1,24 @@
 'use server'
 
-import { auth } from '@/auth'
-import { prisma } from '@/lib/prisma'
 import type { ActionState } from '@/types/form'
 import { revalidatePath } from 'next/cache'
+import { deleteTodoWithValidation } from '../shared/todo-helpers'
 
 /**
  * Todoを削除するサーバーアクション
+ * @param todoId - 削除するTodoのID
+ * @returns 削除結果
  */
 export async function deleteTodoAction(todoId: string): Promise<ActionState> {
   try {
-    // 認証チェック
-    const session = await auth()
-    if (!session?.user?.id) {
+    // セッション確認と削除処理をヘルパー関数で実行
+    const deleteResult = await deleteTodoWithValidation(todoId)
+
+    if (!deleteResult.success) {
       return {
         success: false,
         error: {
-          message: 'ユーザーが認証されていません',
-        },
-      }
-    }
-
-    // 存在確認と所有者チェックを同時に行い、該当するTodoを削除
-    // deleteMany を使用することで、条件に一致するレコードがない場合も安全に処理できます
-    const deletedTodo = await prisma.todo.deleteMany({
-      where: {
-        id: todoId,
-        userId: session.user.id, // 所有者チェックも同時に実行
-      },
-    })
-
-    // 削除されたレコード数をチェック
-    if (deletedTodo.count === 0) {
-      return {
-        success: false,
-        error: {
-          message: '指定されたTodoが存在しないか、削除する権限がありません',
+          message: deleteResult.errorMessage,
         },
       }
     }

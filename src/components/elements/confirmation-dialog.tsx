@@ -10,6 +10,8 @@ type ConfirmationDialogProps = {
   title: string
   /** 確認メッセージ */
   message: string
+  /** 追加の説明文（オプション） */
+  desc?: string
   /** 確認ボタンのテキスト（デフォルト: "確認"） */
   confirmText?: string
   /** キャンセルボタンのテキスト（デフォルト: "キャンセル"） */
@@ -31,6 +33,7 @@ type ConfirmationDialogProps = {
 export function ConfirmationDialog({
   title,
   message,
+  desc = '',
   confirmText = '確認',
   cancelText = 'キャンセル',
   onConfirm,
@@ -101,27 +104,32 @@ export function ConfirmationDialog({
 
           {/* メッセージエリア */}
           <div className="p-6">
-            <Dialog.Description className="text-gray-600 mb-6 whitespace-pre-line">
+            <Dialog.Description className="text-gray-600 text-md whitespace-pre-line">
               {message}
+              {desc && (
+                <span className="text-gray-500 text-[12px] mt-2 block whitespace-pre-line">
+                  {desc}
+                </span>
+              )}
             </Dialog.Description>
 
+            {/* 注意事項 */}
+
             {/* アクションボタン */}
-            <div className="flex justify-end space-x-3">
+            <div className="flex justify-end space-x-3 mt-6">
               <Dialog.Close asChild>
                 <Button
                   onClick={onClose}
                   variant="outline"
                   disabled={isLoading}
                 >
-                  キャンセル
+                  {cancelText}
                 </Button>
               </Dialog.Close>
 
               <Button
                 type="button"
-                className={clsx(
-                  'bg-red-600 text-white hover:bg-red-700',
-                )}
+                className={clsx('bg-red-600 text-white hover:bg-red-700')}
                 disabled={isLoading}
                 onClick={onConfirm}
               >
