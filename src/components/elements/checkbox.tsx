@@ -10,11 +10,13 @@ type CheckboxProps = {
   label?: string
   name?: string
   /** チェック状態 */
-  checked: boolean
+  checked?: boolean
   /** 無効状態 */
   disabled?: boolean
   /** 変更時のコールバック */
-  onChange: (checked: boolean) => void
+  onChange?: (checked: boolean) => void
+  /** デフォルトのチェック状態 */
+  defaultChecked?: boolean
   /** クラス名 */
   className?: string
 }
@@ -31,6 +33,7 @@ export function Checkbox({
   label,
   checked,
   disabled,
+  defaultChecked,
   onChange,
   className,
 }: CheckboxProps) {
@@ -41,9 +44,8 @@ export function Checkbox({
         name={name}
         checked={checked}
         disabled={disabled}
-        onCheckedChange={(checkedState) => {
-          onChange(!!checkedState)
-        }}
+        defaultChecked={defaultChecked}
+        onCheckedChange={onChange}
         className={cn(
           // レイアウト・配置
           'flex items-center justify-center',
