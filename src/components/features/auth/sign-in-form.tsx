@@ -41,7 +41,7 @@ export function SignInForm() {
             label="メールアドレス"
             type="email"
             placeholder="メールアドレスを入力"
-            defaultValue={state?.values?.username}
+            // defaultValue={state?.values?.username}
             errors={state?.error?.fields?.username}
           />
           <InputField
@@ -49,7 +49,7 @@ export function SignInForm() {
             label="パスワード"
             type="password"
             placeholder="パスワードを入力"
-            defaultValue={state?.values?.password}
+            // defaultValue={state?.values?.password}
             errors={state?.error?.fields?.password}
           />
         </div>

@@ -39,7 +39,7 @@ export default function SignUpPage() {
               id="name"
               label="お名前"
               placeholder="お名前を入力"
-              defaultValue={state?.values?.name}
+              // defaultValue={state?.values?.name}
               errors={state?.error?.fields?.name}
               required
             />
@@ -48,7 +48,7 @@ export default function SignUpPage() {
               label="メールアドレス"
               type="email"
               placeholder="メールアドレスを入力"
-              defaultValue={state?.values?.email}
+              // defaultValue={state?.values?.email}
               errors={state?.error?.fields?.email}
               required
             />
@@ -57,7 +57,7 @@ export default function SignUpPage() {
               label="パスワード"
               type="password"
               placeholder="パスワードを入力"
-              defaultValue={state?.values?.password}
+              // defaultValue={state?.values?.password}
               errors={state?.error?.fields?.password}
               required
             />
@@ -66,7 +66,7 @@ export default function SignUpPage() {
               label="パスワード（確認用）"
               type="password"
               placeholder="パスワードを再入力"
-              defaultValue={state?.values?.confirmPassword}
+              // defaultValue={state?.values?.confirmPassword}
               errors={state?.error?.fields?.confirmPassword}
               required
             />

@@ -26,7 +26,7 @@ export async function signUpAction(formData: FormData): Promise<ActionState> {
         message: 'バリデーションエラーが発生しました',
         fields: errors,
       },
-      values, // 入力値を返す
+      // values, // 入力値を返す
     }
   }
 
@@ -42,7 +42,7 @@ export async function signUpAction(formData: FormData): Promise<ActionState> {
         error: {
           message: 'このメールアドレスは既に登録されています',
         },
-        values, // 入力値を返す
+        // values, // 入力値を返す
       }
     }
 
@@ -72,7 +72,7 @@ export async function signUpAction(formData: FormData): Promise<ActionState> {
         error: {
           message: 'サインインに失敗しました',
         },
-        values, // 入力値を返す
+        // values, // 入力値を返す
       }
     }
 
@@ -85,7 +85,7 @@ export async function signUpAction(formData: FormData): Promise<ActionState> {
       error: {
         message: '登録中にエラーが発生しました',
       },
-      values, // 入力値を返す
+      // values, // 入力値を返す
     }
   }
 }

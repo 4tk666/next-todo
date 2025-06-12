@@ -23,7 +23,7 @@ export async function signInAction(formData: FormData): Promise<ActionState> {
 
         fields: errors,
       },
-      values, // 入力値を返す
+      // values, // 入力値を返す
     }
   }
 
@@ -40,7 +40,7 @@ export async function signInAction(formData: FormData): Promise<ActionState> {
         error: {
           message: 'ユーザー名またはパスワードが正しくありません',
         },
-        values, // 入力値を返す（パスワードは消さない）
+        // values, // 入力値を返す（パスワードは消さない）
       }
     }
 
@@ -54,7 +54,7 @@ export async function signInAction(formData: FormData): Promise<ActionState> {
       error: {
         message: 'サインイン中にエラーが発生しました',
       },
-      values, // 入力値を返す
+      // values, // 入力値を返す
     }
   }
 }
