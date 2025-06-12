@@ -1,6 +1,5 @@
 'use server'
 
-import { auth } from '@/auth'
 import { DEFAULT_VALUES } from '@/constants/default-values'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { prisma } from '@/lib/prisma'
@@ -73,7 +72,6 @@ export async function updateTodoAction({
     const parentIdErrorResult = await validateParentId(parentId)
     if (!parentIdErrorResult.success) return parentIdErrorResult
 
-
     // Todoを更新
     await prisma.todo.update({
       where: {
@@ -118,33 +116,15 @@ export async function toggleTodoCompleteAction(
   todoId: string,
   isComplete: boolean,
 ): Promise<ActionState> {
-  const session = await auth()
-  if (!session?.user?.id) {
-    return {
-      success: false,
-      error: {
-        message: 'ログインが必要です',
-      },
-    }
-  }
-
   try {
-    // Todoの存在確認と所有者チェック
-    const existingTodo = await prisma.todo.findFirst({
-      where: {
-        id: todoId,
-        userId: session.user.id,
-      },
-    })
+    // セッション認証チェック
+    const sessionResult = await getSessionUserIdOrError()
 
-    if (!existingTodo) {
-      return {
-        success: false,
-        error: {
-          message: 'タスクが見つかりません',
-        },
-      }
-    }
+    if (!sessionResult.success) return sessionResult
+
+    // Todoの存在確認と所有者チェック
+    const ownershipErrorResult = await validateTodoOwnership(todoId)
+    if (!ownershipErrorResult.success) return ownershipErrorResult
 
     // Todoの完了状態を更新
     await prisma.todo.update({
