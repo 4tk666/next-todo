@@ -7,7 +7,7 @@ import { TextareaField } from '@/components/elements/fields/textarea-field'
 import { Select } from '@/components/elements/select'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { updateTodoAction } from '@/lib/server-actions/todos/todo-update-actions'
-import type { UpdateActionState } from '@/types/form'
+import type { ActionState } from '@/types/form'
 import { useActionState } from 'react'
 import clsx from 'clsx'
 import {
@@ -42,11 +42,11 @@ export function TodoUpdateForm({
   onSuccess,
   onCancel,
 }: TodoUpdateFormProps) {
-
+  
   // タスクの完了状態を管理する状態
   const [state, action, isPending] = useActionState(
     async (
-      prevState: UpdateActionState<void, UpdateTodoFormValues> | undefined,
+      prevState: ActionState<void, UpdateTodoFormValues> | undefined,
       formData: FormData,
     ) => {
       const result = await updateTodoAction({ formData, todo })
@@ -157,11 +157,6 @@ export function TodoUpdateForm({
           }
           disabled={isPending}
         />
-        <input
-          type="hidden"
-          name="priority"
-          value={state?.values?.priority ?? todo.priority ?? ''}
-        />
       </div>
 
       <div>
@@ -197,15 +192,6 @@ export function TodoUpdateForm({
           }
           disabled={
             isPending || todosDto.length === 0 || todo.children.length > 0
-          }
-        />
-        <input
-          type="hidden"
-          name="parentId"
-          value={
-            state?.values?.parentId ??
-            todo.parentId ??
-            DEFAULT_VALUES.UNSELECTED_STRING
           }
         />
         <FormError id="parentId" errors={state?.error?.fields?.parentId} />
