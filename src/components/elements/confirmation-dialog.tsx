@@ -106,13 +106,12 @@ export function ConfirmationDialog({
           <div className="p-6">
             <Dialog.Description className="text-gray-600 text-md whitespace-pre-line">
               {message}
+              {desc && (
+                <span className="text-gray-500 text-[12px] mt-2 block whitespace-pre-line">
+                  {desc}
+                </span>
+              )}
             </Dialog.Description>
-
-            {desc && (
-              <Dialog.Description className="text-gray-600 text-sm mt-2 whitespace-pre-line">
-                {desc}
-              </Dialog.Description>
-            )}
 
             {/* 注意事項 */}
 
