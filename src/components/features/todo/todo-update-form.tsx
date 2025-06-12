@@ -7,9 +7,8 @@ import { TextareaField } from '@/components/elements/fields/textarea-field'
 import { Select } from '@/components/elements/select'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { updateTodoAction } from '@/lib/server-actions/todos/todo-update-actions'
-import type { ActionState, UpdateActionState } from '@/types/form'
+import type { UpdateActionState } from '@/types/form'
 import { useActionState } from 'react'
-import { useState } from 'react'
 import clsx from 'clsx'
 import {
   TODO_PRIORITIES,
@@ -32,7 +31,6 @@ type TodoUpdateFormProps = {
   onSuccess: () => void
   /** キャンセル時のコールバック */
   onCancel: () => void
-  setIsChecked: (isChecked: boolean) => void
 }
 
 /**
@@ -43,10 +41,7 @@ export function TodoUpdateForm({
   todosDto,
   onSuccess,
   onCancel,
-  setIsChecked,
 }: TodoUpdateFormProps) {
-  // フォーム上での完了状態をローカルで管理
-  const [isLocalChecked, setIsLocalChecked] = useState(todo.isComplete)
 
   // タスクの完了状態を管理する状態
   const [state, action, isPending] = useActionState(
@@ -58,8 +53,10 @@ export function TodoUpdateForm({
       if (result.success) {
         // 成功時のコールバック
         onSuccess()
-        setIsChecked(isLocalChecked)
         toast.success('タスクを更新しました')
+      } else {
+        // エラー時のコールバック
+        toast.error(result.error?.message || 'タスクの更新に失敗しました')
       }
 
       return result
@@ -77,9 +74,8 @@ export function TodoUpdateForm({
           id="isComplete"
           name="isComplete"
           label="完了にする"
-          checked={isLocalChecked}
+          defaultChecked={state?.values?.isComplete ?? todo.isComplete}
           disabled={isPending}
-          onChange={(checked) => setIsLocalChecked(checked)}
         />
       </div>
 
@@ -153,9 +149,11 @@ export function TodoUpdateForm({
             label: TODO_PRIORITY_LABELS[priority] ?? 'エラー',
           }))}
           defaultValue={
-            typeof state?.values?.priority === 'number'
+            state?.values?.priority
               ? String(state.values.priority)
-              : String(todo.priority)
+              : todo.priority
+                ? String(todo.priority)
+                : String(TODO_PRIORITIES.UN_SELECTED)
           }
           disabled={isPending}
         />

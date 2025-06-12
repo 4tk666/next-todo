@@ -11,7 +11,6 @@ type TodoUpdateProps = {
   todosDto: TodoDTO[]
   /** 編集ボタンとして表示する子要素 */
   children: React.ReactNode
-  setIsChecked: (isChecked: boolean) => void
 }
 
 /**
@@ -22,7 +21,6 @@ export function TodoUpdate({
   todo,
   todosDto,
   children,
-  setIsChecked,
 }: TodoUpdateProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
 
@@ -51,7 +49,6 @@ export function TodoUpdate({
             todosDto={todosDto}
             onSuccess={closeForm}
             onCancel={closeForm}
-            setIsChecked={setIsChecked}
           />
         </SideOverlay>
       )}

@@ -4,44 +4,39 @@ import { Checkbox } from '@/components/elements/checkbox'
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { toggleTodoCompleteAction } from '@/lib/server-actions/todos/todo-update-actions'
 import { useTransition } from 'react'
+import { toast } from 'sonner'
 
 type TodoCheckboxProps = {
   /** Todo項目 */
   todo: TodoDTO
-  isChecked: boolean
-  setIsChecked: (isChecked: boolean) => void
 }
 
 /**
  * Todo完了状態を切り替えるチェックボックスコンポーネント
  * よりシンプルなサーバーアクション統合版
  */
-export function TodoUpdateFormCheckbox({
-  todo,
-  isChecked,
-  setIsChecked,
-}: TodoCheckboxProps) {
+export function TodoUpdateFormCheckbox({ todo }: TodoCheckboxProps) {
   const [isPending, startTransition] = useTransition()
 
   return (
     <Checkbox
       id="isCompleteTableRow"
-      checked={isChecked}
+      checked={todo.isComplete}
       disabled={isPending}
       onChange={(isNewChecked) => {
-        setIsChecked(isNewChecked)
         startTransition(async () => {
           try {
             const result = await toggleTodoCompleteAction(todo.id, isNewChecked)
 
             if (!result.success) {
-              console.error('Todo完了状態の更新に失敗しました:')
-              setIsChecked(todo.isComplete) // 元の状態に戻す
+              toast.error(
+                result.error?.message || 'タスクの完了状態の更新に失敗しました',
+              )
               return
             }
           } catch (error) {
             console.error(error)
-            setIsChecked(todo.isComplete) // 元の状態に戻す
+            toast.error('タスクの完了状態の更新中にエラーが発生しました')
           }
         })
       }}

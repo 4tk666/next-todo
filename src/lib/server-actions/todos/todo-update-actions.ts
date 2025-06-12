@@ -30,14 +30,22 @@ export async function updateTodoAction({
 
     if (!sessionResult.success) return sessionResult
 
-    const values = {
+    const values: UpdateTodoFormValues = {
       id: todo.id,
       isComplete: formData.get('isComplete') === 'on',
-      title: formData.get('title'),
-      description: formData.get('description'),
-      dueDate: formData.get('dueDate'),
-      priority: formData.get('priority'),
-      parentId: formData.get('parentId'),
+      title: String(formData.get('title') ?? ''),
+      description: formData.get('description')
+        ? String(formData.get('description'))
+        : null,
+      dueDate: formData.get('dueDate')
+        ? new Date(formData.get('dueDate')?.toString() ?? '')
+        : null,
+      priority: formData.get('priority')
+        ? Number(String(formData.get('priority')))
+        : null,
+      parentId: formData.get('parentId')
+        ? String(formData.get('parentId'))
+        : null,
     }
 
     // バリデーション
@@ -50,11 +58,11 @@ export async function updateTodoAction({
           message: '入力内容に誤りがあります',
           fields: validatedFields.error.flatten().fieldErrors,
         },
-        values: validatedFields.data,
+        values,
       }
     }
 
-        const { id, title, description, isComplete, dueDate, priority, parentId } =
+    const { id, title, description, isComplete, dueDate, priority, parentId } =
       validatedFields.data
 
     // Todoの存在確認と所有者チェック
@@ -65,7 +73,7 @@ export async function updateTodoAction({
     const parentIdErrorResult = await validateParentId(parentId)
     if (!parentIdErrorResult.success) return parentIdErrorResult
 
-    
+
     // Todoを更新
     await prisma.todo.update({
       where: {

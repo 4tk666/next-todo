@@ -2,7 +2,6 @@
 
 import type { TodoDTO } from '@/lib/dto/todoDto'
 import { clsx } from 'clsx'
-import { useState } from 'react'
 import { FiEdit2, FiChevronRight, FiChevronDown } from 'react-icons/fi'
 import { TodoDelete } from './todo-delete'
 import { TodoUpdate } from './todo-update'
@@ -26,9 +25,6 @@ export function TodoItem({
   isChildrenTodo = false,
   handleToggleExpansion,
 }: TodoItemProps) {
-  // テーブル行からの更新と編集からの更新と2つの更新方法があるため、
-  // チェック状態をローカルで管理
-  const [isChecked, setIsChecked] = useState(todo.isComplete)
   return (
     <>
       <td
@@ -36,8 +32,6 @@ export function TodoItem({
       >
         <TodoUpdateFormCheckbox
           todo={todo}
-          isChecked={isChecked}
-          setIsChecked={setIsChecked}
         />
       </td>
       <td className={clsx('p-3', 'border-r border-gray-200')}>
@@ -126,7 +120,7 @@ export function TodoItem({
       <td
         className={clsx('p-3 w-12', 'text-right', 'border-r border-gray-200')}
       >
-        <TodoUpdate todo={todo} todosDto={todosDto} setIsChecked={setIsChecked}>
+        <TodoUpdate todo={todo} todosDto={todosDto}>
           <div
             className={clsx(
               'p-1',
