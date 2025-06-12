@@ -28,15 +28,16 @@ export function TodoUpdateFormCheckbox({ todo }: TodoCheckboxProps) {
           try {
             const result = await toggleTodoCompleteAction(todo.id, isNewChecked)
 
-            if (!result.success) {
+            if (result.success) {
+              toast.success('タスクの完了状態を更新しました')
+            } else {
               toast.error(
                 result.error?.message || 'タスクの完了状態の更新に失敗しました',
               )
-              return
             }
           } catch (error) {
             console.error(error)
-            toast.error('タスクの完了状態の更新中にエラーが発生しました')
+            toast.error('例外が発生しました。タスクの完了状態を更新できませんでした。')
           }
         })
       }}
