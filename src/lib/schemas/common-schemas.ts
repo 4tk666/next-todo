@@ -36,22 +36,17 @@ export const titleSchema = requiredStringSchema.max(100, {
 export const descriptionSchema = z
   .string()
   .max(500, { message: '説明は500文字以下で入力してください' })
-  .optional()
   .nullable()
 
 // ブール値のスキーマ
 export const booleanSchema = z.boolean()
 
 // 期日のスキーマ（ISO文字列形式での入力を受け取り、日付に変換してバリデーション）
-export const dueDateSchema = z
+export const dueDateSchema = z.date().nullable()
+
+export const parentIdSchema = z
   .string()
-  .optional()
   .nullable()
-  .transform((value) => {
-    if (!value) return null
-    const date = new Date(value)
-    return Number.isNaN(date.getTime()) ? null : date
-  })
 
 // パスワード確認用のrefineヘルパー関数
 export function createPasswordConfirmationRefine<
@@ -65,19 +60,13 @@ export function createPasswordConfirmationRefine<
 
 // 優先度のスキーマ
 export const prioritySchema = z
-  .string()
+  .number()
   .refine(
     (value) => {
-      const numberValue = Number(value)
-      if (Number.isNaN(numberValue)) return false
-
-      return Object.values(TODO_PRIORITIES).includes(
-        numberValue as TodoPriority,
-      )
+      return Object.values(TODO_PRIORITIES).includes(value as TodoPriority)
     },
     { message: '有効な優先度を選択してください' },
   )
   .transform((value) => {
-    const numberValue = Number(value)
-    return numberValue === TODO_PRIORITIES.UN_SELECTED ? null : numberValue
+    return value === TODO_PRIORITIES.UN_SELECTED ? null : value
   })
