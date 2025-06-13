@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/elements/button'
-import { DateInput } from '@/components/elements/date-input'
 import { TextareaField } from '@/components/elements/fields/textarea-field'
 import { createTodoAction } from '@/lib/server-actions/todos/todo-create-actions'
 import type { ActionState } from '@/types/form'
@@ -20,6 +19,7 @@ import { ErrorBanner } from '@/components/elements/error-banner'
 import type { CreateTodoFormValues } from '@/lib/schemas/todos/todo-create-schema'
 import { formatDateToString } from '@/lib/utils/date-utils'
 import { toast } from 'sonner'
+import { DateInputField } from '@/components/elements/fields/date-input-field'
 
 type TodoFormProps = {
   todosDto: TodoDTO[]
@@ -88,7 +88,7 @@ export function TodoForm({ todosDto, onSuccess, onCancel }: TodoFormProps) {
       </div>
 
       <div>
-        <DateInput
+        <DateInputField
           id="dueDate"
           name="dueDate"
           label="期日"

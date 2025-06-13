@@ -4,14 +4,9 @@ import { clsx } from 'clsx'
 import { DateInput, type DateInputProps } from '../date-input'
 import { FormError } from '../form-error'
 
-type DateInputFiledProps = Pick<
+type DateInputFieldProps = Pick<
   DateInputProps,
-  | 'format'
-  | 'className'
-  | 'disabled'
-  | 'id'
-  | 'name'
-  | 'defaultValue'
+  'format' | 'className' | 'disabled' | 'id' | 'name' | 'defaultValue'
 > & {
   label?: string
   errors?: string[]
@@ -23,10 +18,10 @@ type DateInputFiledProps = Pick<
  * 日付選択のための入力フィールドを提供します。
  * ラベル、エラーメッセージ、デフォルト値の設定が可能です。
  *
- * @param props - DateInputFiledProps
+ * @param props -  DateInputFieldProps
  * @returns 日付入力フィールドコンポーネント
  */
-export function DateInputFiled({
+export function DateInputField({
   format = 'yyyy/MM/dd',
   className,
   disabled = false,
@@ -35,7 +30,7 @@ export function DateInputFiled({
   id,
   name,
   defaultValue,
-}: DateInputFiledProps) {
+}: DateInputFieldProps) {
   return (
     <div className="w-full">
       {/* ラベル部分 */}
