@@ -9,35 +9,16 @@ import { useActionState } from 'react'
 import { signUpAction } from '../../../lib/server-actions/auth/sign-up-actions'
 import { ErrorBanner } from '@/components/elements/error-banner'
 import type { SignUpFormValues } from '@/lib/schemas/auth/sign-up-schema'
-import { toast } from 'sonner'
 
 export default function SignUpPage() {
   const router = useRouter()
 
   const [state, action, isPending] = useActionState(
     async (
-      state: ActionState<void, SignUpFormValues> | undefined,
+      _prevState: ActionState<void, SignUpFormValues> | undefined,
       formData: FormData,
     ) => {
-      try {
-        const result = await signUpAction(formData)
-        if (result.success) {
-          router.push('/')
-          toast.success('アカウントを作成しました。')
-        } else {
-          // エラーがある場合はそのまま表示
-          toast.error(
-            result.error?.message || 'アカウントの作成に失敗しました。',
-          )
-        }
-
-        return result
-      } catch (error) {
-        console.error('Sign up error:', error)
-        toast.error(
-          'アカウントの作成中にエラーが発生しました。もう一度お試しください。',
-        )
-      }
+      return await signUpAction(formData)
     },
     undefined,
   )

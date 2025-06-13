@@ -8,6 +8,7 @@ import {
 } from '@/lib/schemas/auth/sign-up-schema'
 import { hashPassword } from '@/lib/utils/auth-utils'
 import type { ActionState } from '@/types/form'
+import { redirect } from 'next/navigation'
 
 export async function signUpAction(
   formData: FormData,
@@ -47,7 +48,7 @@ export async function signUpAction(
         error: {
           message: 'このメールアドレスは既に登録されています',
         },
-        values: validationResult.data
+        values: validationResult.data,
       }
     }
 
@@ -64,26 +65,11 @@ export async function signUpAction(
     })
 
     // 元のパスワード（平文）を使用してサインイン
-    const result = await signIn('credentials', {
+    await signIn('credentials', {
       username: user.email,
       password: values.password, // ハッシュ化前のパスワードを使用
       redirect: false,
     })
-
-    // サインインの結果を確認
-    if (result?.error) {
-      return {
-        success: false,
-        error: {
-          message: 'サインインに失敗しました',
-        },
-        values: validationResult.data,
-      }
-    }
-
-    return {
-      success: true,
-    }
   } catch (error) {
     return {
       success: false,
@@ -92,4 +78,6 @@ export async function signUpAction(
       },
     }
   }
+
+  redirect('/')
 }
