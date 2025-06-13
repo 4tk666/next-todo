@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/elements/button'
 import { Checkbox } from '@/components/elements/checkbox'
-import { DateInput } from '@/components/elements/date-input'
 import { TextareaField } from '@/components/elements/fields/textarea-field'
 import { Select } from '@/components/elements/select'
 import type { TodoDTO } from '@/lib/dto/todoDto'
@@ -21,6 +20,7 @@ import type { UpdateTodoFormValues } from '@/lib/schemas/todos/todo-update-schem
 import { formatDateToString } from '@/lib/utils/date-utils'
 import { ErrorBanner } from '@/components/elements/error-banner'
 import { toast } from 'sonner'
+import { DateInputField } from '@/components/elements/fields/date-input-field'
 
 type TodoUpdateFormProps = {
   /** 編集対象のTodo */
@@ -42,7 +42,6 @@ export function TodoUpdateForm({
   onSuccess,
   onCancel,
 }: TodoUpdateFormProps) {
-  
   // タスクの完了状態を管理する状態
   const [state, action, isPending] = useActionState(
     async (
@@ -111,7 +110,7 @@ export function TodoUpdateForm({
       </div>
 
       <div>
-        <DateInput
+        <DateInputField
           id="dueDate"
           name="dueDate"
           label="期日"
