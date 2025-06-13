@@ -2,17 +2,22 @@
 
 import { signIn } from '@/auth'
 import { prisma } from '@/lib/prisma'
-import { signUpSchema } from '@/lib/schemas/auth/sign-up-schema'
+import {
+  type SignUpFormValues,
+  signUpSchema,
+} from '@/lib/schemas/auth/sign-up-schema'
 import { hashPassword } from '@/lib/utils/auth-utils'
 import type { ActionState } from '@/types/form'
 
-export async function signUpAction(formData: FormData): Promise<ActionState> {
+export async function signUpAction(
+  formData: FormData,
+): Promise<ActionState<void, SignUpFormValues>> {
   // 入力値を保持
   const values = {
-    name: formData.get('name') as string,
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-    confirmPassword: formData.get('confirmPassword') as string,
+    name: formData.get('name')?.toString() ?? '',
+    email: formData.get('email')?.toString() ?? '',
+    password: formData.get('password')?.toString() ?? '',
+    confirmPassword: formData.get('confirmPassword')?.toString() ?? '',
   }
 
   // zodでバリデーション
@@ -26,7 +31,7 @@ export async function signUpAction(formData: FormData): Promise<ActionState> {
         message: 'バリデーションエラーが発生しました',
         fields: errors,
       },
-      // values, // 入力値を返す
+      values,
     }
   }
 
@@ -42,7 +47,7 @@ export async function signUpAction(formData: FormData): Promise<ActionState> {
         error: {
           message: 'このメールアドレスは既に登録されています',
         },
-        // values, // 入力値を返す
+        values: validationResult.data
       }
     }
 
@@ -72,7 +77,7 @@ export async function signUpAction(formData: FormData): Promise<ActionState> {
         error: {
           message: 'サインインに失敗しました',
         },
-        // values, // 入力値を返す
+        values: validationResult.data,
       }
     }
 
@@ -85,7 +90,6 @@ export async function signUpAction(formData: FormData): Promise<ActionState> {
       error: {
         message: '登録中にエラーが発生しました',
       },
-      // values, // 入力値を返す
     }
   }
 }

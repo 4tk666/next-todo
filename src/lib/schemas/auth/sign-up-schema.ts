@@ -10,4 +10,4 @@ const baseSignUpSchema = z.object({
 
 export const signUpSchema = createPasswordConfirmationRefine(baseSignUpSchema)
 
-export type SignUpInput = z.infer<typeof signUpSchema>
+export type SignUpFormValues = z.infer<typeof signUpSchema>
