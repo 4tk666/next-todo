@@ -1,6 +1,5 @@
 'use server'
 
-import { auth } from '@/auth'
 import { DEFAULT_VALUES } from '@/constants/default-values'
 import { prisma } from '@/lib/prisma'
 import {
