@@ -19,9 +19,11 @@ export default function RootLayout({
       <body>
         {/* AuthProvider はセッション（ログイン状態）をコンポーネントに共有するために必要 */}
         <AuthProvider>
-          <div className="min-h-screen flex flex-col">
+          <div className="flex flex-col h-screen">
             <Header />
-            <main className="flex-grow p-4 sm:p-6 lg:p-8">{children}</main>
+            <main className="flex-1 p-4 sm:p-6 lg:p-8 mt-[64px]">
+              {children}
+            </main>
           </div>
           <Toaster />
         </AuthProvider>

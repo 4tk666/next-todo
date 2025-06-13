@@ -8,22 +8,42 @@ import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
 import { signUpAction } from '../../../lib/server-actions/auth/sign-up-actions'
 import { ErrorBanner } from '@/components/elements/error-banner'
+import type { SignUpFormValues } from '@/lib/schemas/auth/sign-up-schema'
+import { toast } from 'sonner'
 
 export default function SignUpPage() {
   const router = useRouter()
 
   const [state, action, isPending] = useActionState(
-    async (state: ActionState | undefined, formData: FormData) => {
-      const result = await signUpAction(formData)
-      if (result.success) router.push('/')
+    async (
+      state: ActionState<void, SignUpFormValues> | undefined,
+      formData: FormData,
+    ) => {
+      try {
+        const result = await signUpAction(formData)
+        if (result.success) {
+          router.push('/')
+          toast.success('アカウントを作成しました。')
+        } else {
+          // エラーがある場合はそのまま表示
+          toast.error(
+            result.error?.message || 'アカウントの作成に失敗しました。',
+          )
+        }
 
-      return result
+        return result
+      } catch (error) {
+        console.error('Sign up error:', error)
+        toast.error(
+          'アカウントの作成中にエラーが発生しました。もう一度お試しください。',
+        )
+      }
     },
     undefined,
   )
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center h-full">
       <div className="relative w-full max-w-md rounded-lg bg-white p-8 border">
         <div className="text-center">
           <h2 className="text-2xl font-bold tracking-tight text-gray-900">
@@ -39,7 +59,7 @@ export default function SignUpPage() {
               id="name"
               label="お名前"
               placeholder="お名前を入力"
-              // defaultValue={state?.values?.name}
+              defaultValue={state?.values?.name}
               errors={state?.error?.fields?.name}
               required
             />
@@ -48,7 +68,7 @@ export default function SignUpPage() {
               label="メールアドレス"
               type="email"
               placeholder="メールアドレスを入力"
-              // defaultValue={state?.values?.email}
+              defaultValue={state?.values?.email}
               errors={state?.error?.fields?.email}
               required
             />
@@ -57,7 +77,7 @@ export default function SignUpPage() {
               label="パスワード"
               type="password"
               placeholder="パスワードを入力"
-              // defaultValue={state?.values?.password}
+              defaultValue={state?.values?.password}
               errors={state?.error?.fields?.password}
               required
             />
@@ -66,7 +86,7 @@ export default function SignUpPage() {
               label="パスワード（確認用）"
               type="password"
               placeholder="パスワードを再入力"
-              // defaultValue={state?.values?.confirmPassword}
+              defaultValue={state?.values?.confirmPassword}
               errors={state?.error?.fields?.confirmPassword}
               required
             />

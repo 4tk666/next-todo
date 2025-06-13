@@ -8,7 +8,7 @@ export async function Header() {
   const session = await auth()
 
   return (
-    <header className="bg-white shadow">
+    <header className="bg-white shadow fixed top-0 left-0 w-full z-50">
       <div className={clsx('max-w-7xl mx-auto', 'px-4 sm:px-6 lg:px-8')}>
         <div className="flex justify-between h-16">
           <div className="flex">
