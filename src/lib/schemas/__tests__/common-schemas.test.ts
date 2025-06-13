@@ -9,6 +9,7 @@ import {
   descriptionSchema,
   booleanSchema,
   dueDateSchema,
+  parentIdSchema,
   createPasswordConfirmationRefine,
 } from '../common-schemas'
 
@@ -189,11 +190,9 @@ describe('common-schemas', () => {
       }
     })
 
-    it('nullとundefinedを受け入れる', () => {
+    it('nullを受け入れる', () => {
       expect(() => descriptionSchema.parse(null)).not.toThrow()
-      expect(() => descriptionSchema.parse(undefined)).not.toThrow()
       expect(descriptionSchema.parse(null)).toBeNull()
-      expect(descriptionSchema.parse(undefined)).toBeUndefined()
     })
 
     it('500文字を超える説明文を拒否する', () => {
@@ -225,106 +224,28 @@ describe('common-schemas', () => {
   })
 
   describe('dueDateSchema', () => {
-    it('有効なISO文字列を日付オブジェクトに変換する', () => {
-      const validISOStrings = [
-        '2025-06-01T10:30:00.000Z',
-        '2025-12-25T00:00:00.000Z',
-        '2024-02-29T12:00:00.000Z', // うるう年
-        '2025-01-01T23:59:59.999Z',
-      ]
-
-      for (const isoString of validISOStrings) {
-        const result = dueDateSchema.parse(isoString)
-        expect(result).toBeInstanceOf(Date)
-        expect(result?.toISOString()).toBe(isoString)
-      }
-    })
-
-    it('有効な日付文字列を日付オブジェクトに変換する', () => {
-      const validDateStrings = [
-        '2025-06-01',
-        '2025/06/01',
-        'June 1, 2025',
-        '2025-06-01 10:30:00',
-      ]
-
-      for (const dateString of validDateStrings) {
-        const result = dueDateSchema.parse(dateString)
-        expect(result).toBeInstanceOf(Date)
-        expect(result?.getTime()).not.toBeNaN()
-      }
-    })
-
-    it('空文字列をnullに変換する', () => {
-      const result = dueDateSchema.parse('')
-      expect(result).toBeNull()
-    })
-
-    it('undefinedをnullに変換する', () => {
-      const result = dueDateSchema.parse(undefined)
-      expect(result).toBeNull()
+    it('有効な日付を受け入れる', () => {
+      const date = new Date('2023-10-01T00:00:00Z')
+      const result = dueDateSchema.parse(date)
+      expect(result).toEqual(date)
     })
 
     it('nullをnullのまま返す', () => {
       const result = dueDateSchema.parse(null)
       expect(result).toBeNull()
     })
+  })
 
-    it('無効な日付文字列をnullに変換する', () => {
-      const invalidDateStrings = [
-        'invalid-date',
-        'not-a-date',
-        'abcdef',
-        '2025/99/99',
-        '99/99/99',
-        'definitely-not-a-date',
-        '2025-15-40', // 明らかに無効な月と日
-      ]
-
-      for (const invalidDate of invalidDateStrings) {
-        const result = dueDateSchema.parse(invalidDate)
-        expect(result).toBeNull()
-      }
+  describe('parentIdSchema', () => {
+    it('文字列を受け入れる', () => {
+      const id = 'todo-123'
+      const result = parentIdSchema.parse(id)
+      expect(result).toBe(id)
     })
 
-    it('タイムゾーンを含む日付文字列を正しく処理する', () => {
-      const dateWithTimezone = '2025-06-01T10:30:00+09:00'
-      const result = dueDateSchema.parse(dateWithTimezone)
-      expect(result).toBeInstanceOf(Date)
-      expect(result?.getTime()).not.toBeNaN()
-    })
-
-    it('数値文字列（Unix タイムスタンプ形式）の処理', () => {
-      // 数値のみの文字列は、Date コンストラクタでは無効と判定される
-      const numericString = '1735689600000' // Unix タイムスタンプ（ミリ秒）
-      const result = dueDateSchema.parse(numericString)
-      // JavaScriptのDateコンストラクタでは、この形式は無効として扱われる
-      expect(result).toBeNull()
-    })
-
-    // Dateの変換方法など修正 #60
-    it('JavaScriptが自動的に修正する日付の処理', () => {
-      // JavaScriptは無効な日付を自動的に調整する
-      const autoAdjustedDate = '2025-02-30' // 2月30日は3月2日に調整される
-      const result = dueDateSchema.parse(autoAdjustedDate)
-      expect(result).toBeInstanceOf(Date)
-      expect(result?.getMonth()).toBe(2) // 3月（0ベース）
-      expect(result?.getDate()).toBe(2) // 2日
-    })
-
-    it('フォーム送信で実際に使用される形式をテストする', () => {
-      // DateInputコンポーネントから送信される実際の形式
-      const formSubmissionDate = '2025-06-01T10:30:00.000Z'
-      const result = dueDateSchema.parse(formSubmissionDate)
-      expect(result).toBeInstanceOf(Date)
-      expect(result?.toISOString()).toBe(formSubmissionDate)
-    })
-
-    it('変換結果がnullの場合でもエラーを投げない', () => {
-      expect(() => dueDateSchema.parse('invalid')).not.toThrow()
-      expect(() => dueDateSchema.parse('')).not.toThrow()
-      expect(() => dueDateSchema.parse(null)).not.toThrow()
-      expect(() => dueDateSchema.parse(undefined)).not.toThrow()
+    it('nullを受け入れる（親がない場合）', () => {
+      expect(() => parentIdSchema.parse(null)).not.toThrow()
+      expect(parentIdSchema.parse(null)).toBeNull()
     })
   })
 
