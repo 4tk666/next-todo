@@ -29,25 +29,9 @@ export default function TodoTabs({ todosDto }: TodoTabsProps) {
           <TodoCreate todosDto={todosDto} />
         </div>
 
-        <table className="min-w-full">
-          <thead>
-            <tr className="bg-gray-50 text-xs font-medium text-gray-500 border-y border-gray-200">
-              <th className="w-13 p-3 text-center border-r border-gray-200">
-                状態
-              </th>
-              <th className="p-3 text-left border-r border-gray-200">
-                タスク名
-              </th>
-              <th className="p-3 text-left border-r border-gray-200">期日</th>
-              <th className="p-3 text-left border-r border-gray-200">優先度</th>
-              <th className="w-14 p-3 border-r border-gray-200" />
-              <th className="w-14 p-3" />
-            </tr>
-          </thead>
-          <tbody>
-            <TodoList todosDto={todosDto} />
-          </tbody>
-        </table>
+        <div className="space-y-2">
+          <TodoList todosDto={todosDto} />
+        </div>
       </>
     </TabsComponent>
   )
