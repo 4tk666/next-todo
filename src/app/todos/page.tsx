@@ -1,6 +1,5 @@
 import { auth } from '@/auth'
-import { TodoCreate } from '@/components/features/todo/todo-create'
-import TodoList from '@/components/features/todo/todo-list'
+import TodoTabs from '@/components/features/todo/todo-tabs'
 import { getTodos } from '@/lib/data/getTodos'
 import { redirect } from 'next/navigation'
 
@@ -25,29 +24,10 @@ export default async function TodosPage() {
               マイタスク
             </h2>
           </div>
-          <TodoCreate todosDto={todosDto} />
         </div>
 
-        {/* タスクリスト表 */}
-        <table className="min-w-full">
-          <thead>
-            <tr className="bg-gray-50 text-xs font-medium text-gray-500 border-y border-gray-200">
-              <th className="w-13 p-3 text-center border-r border-gray-200">
-                状態
-              </th>
-              <th className="p-3 text-left border-r border-gray-200">
-                タスク名
-              </th>
-              <th className="p-3 text-left border-r border-gray-200">期日</th>
-              <th className="p-3 text-left border-r border-gray-200">優先度</th>
-              <th className="w-14 p-3 border-r border-gray-200" />
-              <th className="w-14 p-3" />
-            </tr>
-          </thead>
-          <tbody>
-            <TodoList todosDto={todosDto} />
-          </tbody>
-        </table>
+        {/* タブコンテンツ */}
+        <TodoTabs todosDto={todosDto} />
       </div>
     </div>
   )
