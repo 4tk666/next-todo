@@ -35,6 +35,10 @@ export function TabsComponent({
   listClassName,
   children,
 }: TabsComponentProps) {
+  if (items.length === 0) {
+    return null
+  }
+
   return (
     <Tabs.Root
       value={value}
@@ -55,7 +59,7 @@ export function TabsComponent({
               'hover:text-gray-900 hover:border-gray-300',
               'data-[state=active]:text-blue-600 data-[state=active]:border-blue-600',
               'cursor-pointer',
-              item.triggerClassName,
+              item.triggerClassName
             )}
           >
             {item.label}
@@ -63,14 +67,16 @@ export function TabsComponent({
         ))}
       </Tabs.List>
 
-      {/* タブコンテンツ部分 - childrenをそのまま表示 */}
-      <div
-        className="outline-none"
-        role="tabpanel"
-        aria-labelledby={items.find((i) => i.value === value)?.label}
-      >
-        {children}
-      </div>
+      {/* 各タブのコンテンツを定義（アクセシビリティのため） */}
+      {items.map((item) => (
+        <Tabs.Content
+          key={item.value}
+          value={item.value}
+          className="outline-none"
+        >
+          {value === item.value ? children : null}
+        </Tabs.Content>
+      ))}
     </Tabs.Root>
   )
 }
