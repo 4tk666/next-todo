@@ -18,14 +18,14 @@ export default function TodoList({ todosDto }: TodoListProps) {
       まだTodoがありません。新しいTodoを作成してください。
     </div>
   ) : (
-    <div className="border-t border-gray-200">
+    <ul className="border-t border-gray-200" aria-label="タスクリスト">
       {todosDto.map((todo) => {
         const isExpanded = expandedTodoIds.includes(todo.id)
         const hasChildren = todo.children.length > 0
 
         return (
           <Fragment key={todo.id}>
-            <div className="bg-white">
+            <li className="bg-white">
               <TodoItem
                 todo={todo}
                 todosDto={todosDto}
@@ -37,17 +37,25 @@ export default function TodoList({ todosDto }: TodoListProps) {
                 }
                 isExpanded={isExpanded}
               />
-            </div>
-            {hasChildren &&
-              isExpanded &&
-              todo.children.map((child) => (
-                <div key={child.id} className="bg-white ml-6">
-                  <TodoItem todo={child} todosDto={todosDto} isChildrenTodo />
-                </div>
-              ))}
+            </li>
+            {hasChildren && isExpanded && (
+              <li className="bg-white ml-6">
+                <ul aria-label="サブタスクリスト">
+                  {todo.children.map((child) => (
+                    <li key={child.id} className="bg-white">
+                      <TodoItem
+                        todo={child}
+                        todosDto={todosDto}
+                        isChildrenTodo
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            )}
           </Fragment>
         )
       })}
-    </div>
+    </ul>
   )
 }
