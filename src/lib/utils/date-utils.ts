@@ -24,7 +24,7 @@ export function parseStringToDate({
   dateString,
   formatType = 'yyyy/MM/dd',
 }: FormatStringToDate): Date | undefined {
-
+  
   const parsedDate = parse(dateString, formatType, new Date())
   if (!isValid(parsedDate)) return
   return parsedDate
