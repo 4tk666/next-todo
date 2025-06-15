@@ -2,8 +2,14 @@ import { auth } from '@/auth'
 import TodoTabs from '@/components/features/todo/todo-tabs'
 import { getTodos } from '@/lib/data/getTodos'
 import { redirect } from 'next/navigation'
+import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
+import { Suspense } from 'react'
 
-export default async function TodosPage() {
+type TodosPageProps = {
+  searchParams: Promise<{ tab?: string }>
+}
+
+export default async function TodosPage({ searchParams }: TodosPageProps) {
   const session = await auth()
 
   // 認証されていない場合はサインインページへリダイレクト
@@ -11,8 +17,12 @@ export default async function TodosPage() {
     redirect('/')
   }
 
-  // ログインユーザーのTodo一覧を取得
-  const todosDto = await getTodos()
+  // URLパラメータからタブを取得、デフォルトはALL
+  const resolvedSearchParams = await searchParams
+  const activeTab = resolvedSearchParams.tab || TODO_TABS_VALUES.ALL
+
+  // タブに応じてTodo一覧を取得
+  const todosDto = await getTodos({ filter: activeTab })
 
   return (
     <div className="container mx-auto max-w-[100%]">
@@ -27,7 +37,9 @@ export default async function TodosPage() {
         </div>
 
         {/* タブコンテンツ */}
-        <TodoTabs todosDto={todosDto} />
+        <Suspense fallback={<div>読み込み中...</div>}>
+          <TodoTabs todosDto={todosDto} activeTab={activeTab} />
+        </Suspense>
       </div>
     </div>
   )
