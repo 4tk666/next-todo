@@ -3,6 +3,7 @@ import {
   createDate,
   parseStringToDate,
   formatDateToString,
+  getDateOnly,
 } from '../date-utils'
 
 describe('date-utils', () => {
@@ -90,6 +91,48 @@ describe('date-utils', () => {
       const invalidDate = new Date('invalid-date')
       const result = formatDateToString({ date: invalidDate })
       expect(result).toBe('error: Invalid date')
+    })
+  })
+
+  describe('getDateOnly', () => {
+    it('時刻部分をリセットして日付のみを返す', () => {
+      const inputDate = new Date('2025-06-15T14:30:45.123')
+      const result = getDateOnly(inputDate)
+      
+      expect(result).toBeInstanceOf(Date)
+      expect(result.getFullYear()).toBe(2025)
+      expect(result.getMonth()).toBe(5) // 0ベースなので6月は5
+      expect(result.getDate()).toBe(15)
+      expect(result.getHours()).toBe(0)
+      expect(result.getMinutes()).toBe(0)
+      expect(result.getSeconds()).toBe(0)
+      expect(result.getMilliseconds()).toBe(0)
+    })
+
+    it('深夜の時刻でも同じ日付の0時になる', () => {
+      const inputDate = new Date('2025-12-31T23:59:59.999')
+      const result = getDateOnly(inputDate)
+      
+      expect(result.getFullYear()).toBe(2025)
+      expect(result.getMonth()).toBe(11) // 12月は11
+      expect(result.getDate()).toBe(31)
+      expect(result.getHours()).toBe(0)
+      expect(result.getMinutes()).toBe(0)
+      expect(result.getSeconds()).toBe(0)
+      expect(result.getMilliseconds()).toBe(0)
+    })
+
+    it('すでに0時の日付でも正しく処理される', () => {
+      const inputDate = new Date('2025-06-15T00:00:00.000')
+      const result = getDateOnly(inputDate)
+      
+      expect(result.getFullYear()).toBe(2025)
+      expect(result.getMonth()).toBe(5)
+      expect(result.getDate()).toBe(15)
+      expect(result.getHours()).toBe(0)
+      expect(result.getMinutes()).toBe(0)
+      expect(result.getSeconds()).toBe(0)
+      expect(result.getMilliseconds()).toBe(0)
     })
   })
 })
