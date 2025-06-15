@@ -4,6 +4,7 @@ import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { getTodoDTO } from '../dto/todoDto'
 import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
+import { getDateOnly } from '../utils/date-utils'
 
 type GetTodosOptions = {
   filter?: string
@@ -35,20 +36,20 @@ export async function getTodos(options: GetTodosOptions = {}) {
       return { isComplete: true }
     }
     if (filterType === TODO_TABS_VALUES.UPCOMING) {
-      const now = new Date()
+      const today = getDateOnly(new Date())
       return {
         isComplete: false,
         dueDate: {
-          gte: now, // 期限日が現在時刻より後（greater than）
+          gte: today, // 今日を含んだ以降の日付
         },
       }
     }
     if (filterType === TODO_TABS_VALUES.OVERDUE) {
-      const now = new Date()
+      const today = getDateOnly(new Date())
       return {
         isComplete: false,
         dueDate: {
-          lt: now,
+          lt: today, // 今日を含まない過去の日付
         },
       }
     }
