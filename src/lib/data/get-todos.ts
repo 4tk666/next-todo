@@ -3,8 +3,7 @@
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { getTodoDTO } from '../dto/todo-dto'
-import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
-import { getDateOnly } from '../utils/date-utils'
+import { createTodoFilterCondition } from '../helpers/todo-filter-helpers'
 
 type GetTodosOptions = {
   filter?: string
@@ -31,37 +30,12 @@ export async function getTodos(options: GetTodosOptions = {}) {
   }
 
   // フィルタに応じた条件を生成する関数
-  const createFilterCondition = (filterType?: string) => {
-    if (filterType === TODO_TABS_VALUES.COMPLETED) {
-      return { isComplete: true }
-    }
-    if (filterType === TODO_TABS_VALUES.UPCOMING) {
-      const today = getDateOnly(new Date())
-      return {
-        isComplete: false,
-        OR: [
-          { dueDate: null }, // 期限が設定されていないTODO
-          { dueDate: { gte: today } }, // 今日以降のTODO
-        ],
-      }
-    }
-    if (filterType === TODO_TABS_VALUES.OVERDUE) {
-      const today = getDateOnly(new Date())
-      return {
-        isComplete: false,
-        dueDate: {
-          lt: today, // 今日を含まない過去の日付
-        },
-      }
-    }
-    // TODO_TABS_VALUES.ALLの場合やfilterがundefinedの場合は空のオブジェクトを返す（すべて表示）
-    return {}
-  }
+  const filterCondition = createTodoFilterCondition(filter)
 
   // where条件を組み立て
   const whereClause = {
     ...baseWhereClause,
-    ...createFilterCondition(filter),
+    ...filterCondition,
   }
 
   const todos = await prisma.todo.findMany({
