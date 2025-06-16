@@ -3,7 +3,7 @@
 import { Button } from '@/components/elements/button'
 import { SideOverlay } from '@/components/elements/side-overlay'
 import { TodoForm } from '@/components/features/todo/todo-post-form'
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { clsx } from 'clsx'
 import { useState } from 'react'
 
@@ -33,7 +33,11 @@ export function TodoCreate({ todosDto }: TodoCreateProps) {
           isOpen={isFormOpen}
           onClose={closeForm}
         >
-          <TodoForm todosDto={todosDto} onSuccess={closeForm} onCancel={closeForm} />
+          <TodoForm
+            todosDto={todosDto}
+            onSuccess={closeForm}
+            onCancel={closeForm}
+          />
         </SideOverlay>
       )}
     </>

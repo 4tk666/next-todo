@@ -3,7 +3,7 @@
 import { TabsComponent } from '@/components/elements/tabs'
 import { TodoCreate } from '@/components/features/todo/todo-create'
 import TodoList from '@/components/features/todo/todo-list'
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { TODO_TABS } from '@/constants/todo-tabs'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'

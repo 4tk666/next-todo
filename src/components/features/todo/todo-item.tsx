@@ -1,6 +1,6 @@
 'use client'
 
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { clsx } from 'clsx'
 import { FiEdit2, FiChevronRight, FiChevronDown } from 'react-icons/fi'
 import { TodoDelete } from './todo-delete'

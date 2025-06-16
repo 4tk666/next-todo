@@ -1,7 +1,7 @@
 'use client'
 
 import { ConfirmationDialog } from '@/components/elements/confirmation-dialog'
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { deleteTodoAction } from '@/lib/server-actions/todos/todo-delete-actions'
 import { clsx } from 'clsx'
 import { useState, useTransition } from 'react'
@@ -48,7 +48,7 @@ export function TodoDelete({ todo }: TodoDeleteProps) {
         <ConfirmationDialog
           title="タスクを削除"
           message={`「${todo.title}」を削除しますか？\nこの操作は取り消すことができません。`}
-          desc='※親タスクを削除すると、タスクとその子タスクもすべて削除されます。'
+          desc="※親タスクを削除すると、タスクとその子タスクもすべて削除されます。"
           confirmText="削除"
           cancelText="キャンセル"
           onConfirm={() => {

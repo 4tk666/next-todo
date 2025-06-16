@@ -1,7 +1,7 @@
 'use client'
 
 import { TodoItem } from '@/components/features/todo/todo-item'
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { createExpandedTodoIds } from '@/lib/features/todos/todo-list-functions'
 import { Fragment, useState } from 'react'
 

@@ -2,7 +2,7 @@
 
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
-import { getTodoDTO } from '../dto/todoDto'
+import { getTodoDTO } from '../dto/todo-dto'
 import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
 import { getDateOnly } from '../utils/date-utils'
 
@@ -39,9 +39,10 @@ export async function getTodos(options: GetTodosOptions = {}) {
       const today = getDateOnly(new Date())
       return {
         isComplete: false,
-        dueDate: {
-          gte: today, // 今日を含んだ以降の日付
-        },
+        OR: [
+          { dueDate: null }, // 期限が設定されていないTODO
+          { dueDate: { gte: today } }, // 今日以降のTODO
+        ],
       }
     }
     if (filterType === TODO_TABS_VALUES.OVERDUE) {

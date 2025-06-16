@@ -13,7 +13,7 @@ import {
   TODO_PRIORITIES,
   TODO_PRIORITY_LABELS,
 } from '@/constants/todo-priority'
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { DEFAULT_VALUES } from '@/constants/default-values'
 import { ErrorBanner } from '@/components/elements/error-banner'
 import type { CreateTodoFormValues } from '@/lib/schemas/todos/todo-create-schema'

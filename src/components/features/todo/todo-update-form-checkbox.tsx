@@ -1,7 +1,7 @@
 'use client'
 
 import { Checkbox } from '@/components/elements/checkbox'
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { toggleTodoCompleteAction } from '@/lib/server-actions/todos/todo-update-actions'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
@@ -37,7 +37,9 @@ export function TodoUpdateFormCheckbox({ todo }: TodoCheckboxProps) {
             }
           } catch (error) {
             console.error(error)
-            toast.error('例外が発生しました。タスクの完了状態を更新できませんでした。')
+            toast.error(
+              '例外が発生しました。タスクの完了状態を更新できませんでした。',
+            )
           }
         })
       }}

@@ -1,6 +1,5 @@
 import { auth } from '@/auth'
 import { LinkButton } from '@/components/elements/link-button'
-import Link from 'next/link'
 
 export default async function Home() {
   const session = await auth()
