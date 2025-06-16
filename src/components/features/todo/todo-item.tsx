@@ -1,6 +1,6 @@
 'use client'
 
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { clsx } from 'clsx'
 import { FiEdit2, FiChevronRight, FiChevronDown } from 'react-icons/fi'
 import { TodoDelete } from './todo-delete'
@@ -10,6 +10,7 @@ import {
   TODO_PRIORITIES,
   TODO_PRIORITY_LABELS,
 } from '@/constants/todo-priority'
+import { isDateOverdue } from '@/lib/utils/date-utils'
 
 type TodoItemProps = {
   todo: TodoDTO
@@ -120,8 +121,20 @@ export function TodoItem({
       </div>
 
       {/* 期日 */}
-      <div className="flex-shrink-0 w-20 text-xs text-gray-500 mr-4">
-        {todo.dueDate || ''}
+      <div className="flex-shrink-0 w-20 text-xs mr-4">
+        {todo.dueDate ? (
+          <span
+            className={clsx(
+              isDateOverdue(todo.dueDate)
+                ? 'text-red-500 font-medium'
+                : 'text-gray-500'
+            )}
+          >
+            {todo.dueDate}
+          </span>
+        ) : (
+          ''
+        )}
       </div>
 
       {/* アクションボタン */}

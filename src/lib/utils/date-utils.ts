@@ -46,3 +46,20 @@ export function formatDateToString({
 export function getDateOnly(date: Date): Date {
   return startOfDay(date)
 }
+
+/**
+ * 指定された期日が現在日時を超過しているかを判定します
+ * @param dueDate - 期日の文字列（yyyy/MM/dd形式）
+ * @returns 期日を超過している場合はtrue、そうでない場合はfalse
+ */
+export function isDateOverdue(dueDate: string): boolean {
+  if (!dueDate) return false
+  
+  const parsedDueDate = parseStringToDate({ dateString: dueDate })
+  if (!parsedDueDate) return false
+  
+  const today = getDateOnly(createDate())
+  const dueDateOnly = getDateOnly(parsedDueDate)
+  
+  return dueDateOnly < today
+}

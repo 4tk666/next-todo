@@ -1,7 +1,7 @@
 'use client'
 
 import { SideOverlay } from '@/components/elements/side-overlay'
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { useState } from 'react'
 import { TodoUpdateForm } from './todo-update-form'
 
@@ -17,11 +17,7 @@ type TodoUpdateProps = {
  * Todo編集機能を提供するコンポーネント
  * 編集ボタンクリック時にサイドオーバーレイでフォームを表示
  */
-export function TodoUpdate({
-  todo,
-  todosDto,
-  children,
-}: TodoUpdateProps) {
+export function TodoUpdate({ todo, todosDto, children }: TodoUpdateProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
 
   const openForm = () => setIsFormOpen(true)

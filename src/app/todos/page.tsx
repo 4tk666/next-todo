@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 import TodoTabs from '@/components/features/todo/todo-tabs'
-import { getTodos } from '@/lib/data/getTodos'
+import { getTodos } from '@/lib/data/get-todos'
 import { redirect } from 'next/navigation'
 import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
 import { Suspense } from 'react'

@@ -1,9 +1,10 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import {
   createDate,
   parseStringToDate,
   formatDateToString,
   getDateOnly,
+  isDateOverdue,
 } from '../date-utils'
 
 describe('date-utils', () => {
@@ -98,7 +99,7 @@ describe('date-utils', () => {
     it('時刻部分をリセットして日付のみを返す', () => {
       const inputDate = new Date('2025-06-15T14:30:45.123')
       const result = getDateOnly(inputDate)
-      
+
       expect(result).toBeInstanceOf(Date)
       expect(result.getFullYear()).toBe(2025)
       expect(result.getMonth()).toBe(5) // 0ベースなので6月は5
@@ -112,7 +113,7 @@ describe('date-utils', () => {
     it('深夜の時刻でも同じ日付の0時になる', () => {
       const inputDate = new Date('2025-12-31T23:59:59.999')
       const result = getDateOnly(inputDate)
-      
+
       expect(result.getFullYear()).toBe(2025)
       expect(result.getMonth()).toBe(11) // 12月は11
       expect(result.getDate()).toBe(31)
@@ -125,7 +126,7 @@ describe('date-utils', () => {
     it('すでに0時の日付でも正しく処理される', () => {
       const inputDate = new Date('2025-06-15T00:00:00.000')
       const result = getDateOnly(inputDate)
-      
+
       expect(result.getFullYear()).toBe(2025)
       expect(result.getMonth()).toBe(5)
       expect(result.getDate()).toBe(15)
@@ -133,6 +134,48 @@ describe('date-utils', () => {
       expect(result.getMinutes()).toBe(0)
       expect(result.getSeconds()).toBe(0)
       expect(result.getMilliseconds()).toBe(0)
+    })
+  })
+
+  describe('isDateOverdue', () => {
+    beforeEach(() => {
+      // 現在日時を2025/06/15に固定
+      vi.useFakeTimers()
+      vi.setSystemTime(new Date('2025-06-15T10:00:00.000Z'))
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('期日が過去の場合はtrueを返す', () => {
+      const result = isDateOverdue('2025/06/14')
+      expect(result).toBe(true)
+    })
+
+    it('期日が今日の場合はfalseを返す', () => {
+      const result = isDateOverdue('2025/06/15')
+      expect(result).toBe(false)
+    })
+
+    it('期日が未来の場合はfalseを返す', () => {
+      const result = isDateOverdue('2025/06/16')
+      expect(result).toBe(false)
+    })
+
+    it('期日が空文字列の場合はfalseを返す', () => {
+      const result = isDateOverdue('')
+      expect(result).toBe(false)
+    })
+
+    it('無効な日付形式の場合はfalseを返す', () => {
+      const result = isDateOverdue('invalid-date')
+      expect(result).toBe(false)
+    })
+
+    it('存在しない日付の場合はfalseを返す', () => {
+      const result = isDateOverdue('2025/02/30')
+      expect(result).toBe(false)
     })
   })
 })

@@ -1,7 +1,7 @@
 'use server'
 
 import { DEFAULT_VALUES } from '@/constants/default-values'
-import type { TodoDTO } from '@/lib/dto/todoDto'
+import type { TodoDTO } from '@/lib/dto/todo-dto'
 import { prisma } from '@/lib/prisma'
 import {
   type UpdateTodoFormValues,
