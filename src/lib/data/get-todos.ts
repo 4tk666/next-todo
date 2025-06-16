@@ -3,7 +3,7 @@
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { getTodoDTO } from '../dto/todo-dto'
-import { createTodoFilterCondition } from '../helpers/todo-filter-helpers'
+import { createTodoFilterCondition } from '../features/todos/todo-list-functions'
 
 type GetTodosOptions = {
   filter?: string
