@@ -1,5 +1,5 @@
 import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
-import { getDateOnly } from '@/lib/utils/date-utils'
+import { getCurrentJSTDate, getDateOnly } from '@/lib/utils/date-utils'
 import { formatInTimeZone, fromZonedTime, toZonedTime } from 'date-fns-tz'
 
 export function createExpandedTodoIds({
@@ -23,13 +23,6 @@ type FilterCondition = {
     dueDate?: Date | null | { gte?: Date; lt?: Date }
   }>
 }
-
-export function getCurrentJSTDate(): Date {
-  const now = new Date();
-  const jstStr = formatInTimeZone(now, 'Asia/Tokyo', 'yyyy-MM-dd HH:mm:ss');
-  return fromZonedTime(jstStr, 'Asia/Tokyo');
-}
-
 /**
  * フィルタタイプに基づいてTODOの検索条件を生成する純粋関数
  * @param filterType フィルタタイプ

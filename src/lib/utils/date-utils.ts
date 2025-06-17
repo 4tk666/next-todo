@@ -1,6 +1,14 @@
 import { format, isValid, parse, startOfDay } from 'date-fns'
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz';
 
 type DateFormatType = 'yyyy/MM/dd HH:mm:ss' | 'yyyy/MM/dd' | 'yyyy/MM'
+
+export function getCurrentJSTDate(): Date {
+  const now = new Date();
+  return fromZonedTime(now, 'Asia/Tokyo');
+}
+
+
 
 /**
  * 統一された日付オブジェクトを作成する
