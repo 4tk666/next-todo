@@ -1,5 +1,6 @@
 import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
-import { getDateOnly } from '@/lib/utils/date-utils';
+import { getDateOnly } from '@/lib/utils/date-utils'
+import { toZonedTime } from 'date-fns-tz'
 
 export function createExpandedTodoIds({
   previousIds,
@@ -11,7 +12,6 @@ export function createExpandedTodoIds({
 
   return newTodoIds
 }
-
 
 type FilterCondition = {
   isComplete?: boolean
@@ -37,7 +37,9 @@ export function createTodoFilterCondition(
   }
 
   if (filterType === TODO_TABS_VALUES.UPCOMING) {
-    const today = getDateOnly(new Date())
+    const now = new Date()
+    const jstTime = toZonedTime(now, 'Asia/Tokyo')
+    const today = getDateOnly(jstTime)
     return {
       isComplete: false,
       OR: [
@@ -48,7 +50,9 @@ export function createTodoFilterCondition(
   }
 
   if (filterType === TODO_TABS_VALUES.OVERDUE) {
-    const today = getDateOnly(new Date())
+    const now = new Date()
+    const jstTime = toZonedTime(now, 'Asia/Tokyo')
+    const today = getDateOnly(jstTime)
     return {
       isComplete: false,
       dueDate: {
