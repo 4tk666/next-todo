@@ -4,6 +4,7 @@ import {
   createTodoFilterCondition,
 } from '../todo-list-functions'
 import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
+import { fromZonedTime } from 'date-fns-tz'
 
 describe('todo-list-functions', () => {
   describe('createExpandedTodoIds', () => {
@@ -106,123 +107,123 @@ describe('todo-list-functions', () => {
     })
   })
 
-  // describe('createTodoFilterCondition', () => {
-  //   // 各テストで使用する固定日時（2025年6月15日 10:00:00 JST）
-  //   const mockCurrentDate = new Date('2025-06-15T10:00:00.000Z')
+  describe('createTodoFilterCondition', () => {
+    // 各テストで使用する固定日時（2025年6月17日 12:00:00 JST）
+    const mockCurrentDate = fromZonedTime('2025-06-17 12:00:00', 'Asia/Tokyo')
 
-  //   beforeEach(() => {
-  //     // 時刻を固定してテストの一貫性を保つ
-  //     vi.useFakeTimers()
-  //     vi.setSystemTime(mockCurrentDate) // 固定時刻を設定
-  //   })
+    beforeEach(() => {
+      // 時刻を固定してテストの一貫性を保つ
+      vi.useFakeTimers()
+      vi.setSystemTime(mockCurrentDate) // 固定時刻を設定
+    })
 
-  //   afterEach(() => {
-  //     vi.useRealTimers() // 実際の時刻システムに戻す
-  //   })
+    afterEach(() => {
+      vi.useRealTimers() // 実際の時刻システムに戻す
+    })
 
-  //   describe('完了タブのフィルタ条件', () => {
-  //     it('完了済みのTODOのみを取得する条件を生成する', () => {
-  //       const result = createTodoFilterCondition(TODO_TABS_VALUES.COMPLETED)
+    describe('完了タブのフィルタ条件', () => {
+      it('完了済みのTODOのみを取得する条件を生成する', () => {
+        const result = createTodoFilterCondition(TODO_TABS_VALUES.COMPLETED)
 
-  //       expect(result).toEqual({
-  //         isComplete: true,
-  //       })
-  //     })
-  //   })
+        expect(result).toEqual({
+          isComplete: true,
+        })
+      })
+    })
 
-  //   describe('今後タブのフィルタ条件', () => {
-  //     it('未完了かつ期限なしまたは今日以降のTODOを取得する条件を生成する', () => {
-  //       const result = createTodoFilterCondition(TODO_TABS_VALUES.UPCOMING)
+    describe('今後タブのフィルタ条件', () => {
+      it('未完了かつ期限なしまたは今日以降のTODOを取得する条件を生成する', () => {
+        const result = createTodoFilterCondition(TODO_TABS_VALUES.UPCOMING)
 
-  //       // 期待される今日の日付（JST時間帯を考慮した実際の結果）
-  //       const expectedToday = new Date('2025-06-14T15:00:00.000Z')
+        // 期待される今日の日付（JST 2025-06-17 の開始時刻）
+        const expectedToday = fromZonedTime('2025-06-17 00:00:00', 'Asia/Tokyo')
 
-  //       expect(result).toEqual({
-  //         isComplete: false,
-  //         OR: [
-  //           { dueDate: null }, // 期限が設定されていないTODO
-  //           { dueDate: { gte: expectedToday } }, // 今日以降のTODO
-  //         ],
-  //       })
-  //     })
+        expect(result).toEqual({
+          isComplete: false,
+          OR: [
+            { dueDate: null }, // 期限が設定されていないTODO
+            { dueDate: { gte: expectedToday } }, // 今日以降のTODO
+          ],
+        })
+      })
 
-  //     it('異なる日付でも正しい条件を生成する', () => {
-  //       // 異なる日付に時刻を変更
-  //       const customDate = new Date('2025-12-25T15:30:00.000Z')
-  //       vi.setSystemTime(customDate)
+      it('異なる日付でも正しい条件を生成する', () => {
+        // 異なる日付に時刻を変更
+        const customDate = fromZonedTime('2025-12-25 15:30:00', 'Asia/Tokyo')
+        vi.setSystemTime(customDate)
 
-  //       const result = createTodoFilterCondition(TODO_TABS_VALUES.UPCOMING)
+        const result = createTodoFilterCondition(TODO_TABS_VALUES.UPCOMING)
 
-  //       // 期待される日付（JST時間帯を考慮した実際の結果）
-  //       const expectedDate = new Date('2025-12-25T15:00:00.000Z')
+        // 期待される日付（JST 2025-12-25 の開始時刻）
+        const expectedDate = fromZonedTime('2025-12-25 00:00:00', 'Asia/Tokyo')
 
-  //       expect(result).toEqual({
-  //         isComplete: false,
-  //         OR: [{ dueDate: null }, { dueDate: { gte: expectedDate } }],
-  //       })
-  //     })
-  //   })
+        expect(result).toEqual({
+          isComplete: false,
+          OR: [{ dueDate: null }, { dueDate: { gte: expectedDate } }],
+        })
+      })
+    })
 
-  //   describe('期限超過タブのフィルタ条件', () => {
-  //     it('未完了かつ今日より前の期限のTODOを取得する条件を生成する', () => {
-  //       const result = createTodoFilterCondition(TODO_TABS_VALUES.OVERDUE)
+    describe('期限超過タブのフィルタ条件', () => {
+      it('未完了かつ今日より前の期限のTODOを取得する条件を生成する', () => {
+        const result = createTodoFilterCondition(TODO_TABS_VALUES.OVERDUE)
 
-  //       // 期待される今日の日付（JST時間帯を考慮した実際の結果）
-  //       const expectedToday = new Date('2025-06-14T15:00:00.000Z')
+        // 期待される今日の日付（JST 2025-06-17 の開始時刻）
+        const expectedToday = fromZonedTime('2025-06-17 00:00:00', 'Asia/Tokyo')
 
-  //       expect(result).toEqual({
-  //         isComplete: false,
-  //         dueDate: {
-  //           lt: expectedToday, // 今日を含まない過去の日付
-  //         },
-  //       })
-  //     })
+        expect(result).toEqual({
+          isComplete: false,
+          dueDate: {
+            lt: expectedToday, // 今日を含まない過去の日付
+          },
+        })
+      })
 
-  //     it('異なる日付でも正しい条件を生成する', () => {
-  //       // 異なる日付に時刻を変更
-  //       const customDate = new Date('2025-08-10T09:00:00.000Z')
-  //       vi.setSystemTime(customDate)
+      it('異なる日付でも正しい条件を生成する', () => {
+        // 異なる日付に時刻を変更
+        const customDate = fromZonedTime('2025-08-10 09:00:00', 'Asia/Tokyo')
+        vi.setSystemTime(customDate)
 
-  //       const result = createTodoFilterCondition(TODO_TABS_VALUES.OVERDUE)
+        const result = createTodoFilterCondition(TODO_TABS_VALUES.OVERDUE)
 
-  //       // 期待される日付（JST時間帯を考慮した実際の結果）
-  //       const expectedDate = new Date('2025-08-09T15:00:00.000Z')
+        // 期待される日付（JST 2025-08-10 の開始時刻）
+        const expectedDate = fromZonedTime('2025-08-10 00:00:00', 'Asia/Tokyo')
 
-  //       expect(result).toEqual({
-  //         isComplete: false,
-  //         dueDate: {
-  //           lt: expectedDate,
-  //         },
-  //       })
-  //     })
-  //   })
+        expect(result).toEqual({
+          isComplete: false,
+          dueDate: {
+            lt: expectedDate,
+          },
+        })
+      })
+    })
 
-  //   describe('すべてタブのフィルタ条件', () => {
-  //     it('フィルタ条件が指定されていない場合は空のオブジェクトを返す', () => {
-  //       const result = createTodoFilterCondition(TODO_TABS_VALUES.ALL)
+    describe('すべてタブのフィルタ条件', () => {
+      it('フィルタ条件が指定されていない場合は空のオブジェクトを返す', () => {
+        const result = createTodoFilterCondition(TODO_TABS_VALUES.ALL)
 
-  //       expect(result).toEqual({})
-  //     })
-  //   })
+        expect(result).toEqual({})
+      })
+    })
 
-  //   describe('デフォルト動作とエッジケース', () => {
-  //     it('filterTypeがundefinedの場合は空のオブジェクトを返す', () => {
-  //       const result = createTodoFilterCondition(undefined)
+    describe('デフォルト動作とエッジケース', () => {
+      it('filterTypeがundefinedの場合は空のオブジェクトを返す', () => {
+        const result = createTodoFilterCondition(undefined)
 
-  //       expect(result).toEqual({})
-  //     })
+        expect(result).toEqual({})
+      })
 
-  //     it('未知のfilterTypeの場合は空のオブジェクトを返す', () => {
-  //       const result = createTodoFilterCondition('unknown-filter')
+      it('未知のfilterTypeの場合は空のオブジェクトを返す', () => {
+        const result = createTodoFilterCondition('unknown-filter')
 
-  //       expect(result).toEqual({})
-  //     })
+        expect(result).toEqual({})
+      })
 
-  //     it('空文字列のfilterTypeは空のオブジェクトを返す', () => {
-  //       const result = createTodoFilterCondition('')
+      it('空文字列のfilterTypeは空のオブジェクトを返す', () => {
+        const result = createTodoFilterCondition('')
 
-  //       expect(result).toEqual({})
-  //     })
-  //   })
-  // })
+        expect(result).toEqual({})
+      })
+    })
+  })
 })

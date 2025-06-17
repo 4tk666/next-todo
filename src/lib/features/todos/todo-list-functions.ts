@@ -1,5 +1,6 @@
 import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
-import { getDateOnly } from '@/lib/utils/date-utils';
+import { getCurrentJSTDate, getDateOnly } from '@/lib/utils/date-utils'
+import { formatInTimeZone, fromZonedTime, toZonedTime } from 'date-fns-tz'
 
 export function createExpandedTodoIds({
   previousIds,
@@ -12,7 +13,6 @@ export function createExpandedTodoIds({
   return newTodoIds
 }
 
-
 type FilterCondition = {
   isComplete?: boolean
   dueDate?: {
@@ -23,7 +23,6 @@ type FilterCondition = {
     dueDate?: Date | null | { gte?: Date; lt?: Date }
   }>
 }
-
 /**
  * フィルタタイプに基づいてTODOの検索条件を生成する純粋関数
  * @param filterType フィルタタイプ
@@ -37,7 +36,7 @@ export function createTodoFilterCondition(
   }
 
   if (filterType === TODO_TABS_VALUES.UPCOMING) {
-    const today = getDateOnly(new Date())
+    const today = getDateOnly(getCurrentJSTDate())
     return {
       isComplete: false,
       OR: [
@@ -48,7 +47,7 @@ export function createTodoFilterCondition(
   }
 
   if (filterType === TODO_TABS_VALUES.OVERDUE) {
-    const today = getDateOnly(new Date())
+    const today = getDateOnly(getCurrentJSTDate())
     return {
       isComplete: false,
       dueDate: {
