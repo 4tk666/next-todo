@@ -1,6 +1,6 @@
 import { TODO_TABS_VALUES } from '@/constants/todo-tabs'
 import { getDateOnly } from '@/lib/utils/date-utils'
-import { toZonedTime } from 'date-fns-tz'
+import { formatInTimeZone, fromZonedTime, toZonedTime } from 'date-fns-tz'
 
 export function createExpandedTodoIds({
   previousIds,
@@ -24,6 +24,12 @@ type FilterCondition = {
   }>
 }
 
+export function getCurrentJSTDate(): Date {
+  const now = new Date();
+  const jstStr = formatInTimeZone(now, 'Asia/Tokyo', 'yyyy-MM-dd HH:mm:ss');
+  return fromZonedTime(jstStr, 'Asia/Tokyo');
+}
+
 /**
  * フィルタタイプに基づいてTODOの検索条件を生成する純粋関数
  * @param filterType フィルタタイプ
@@ -37,9 +43,7 @@ export function createTodoFilterCondition(
   }
 
   if (filterType === TODO_TABS_VALUES.UPCOMING) {
-    const now = new Date()
-    const jstTime = toZonedTime(now, 'Asia/Tokyo')
-    const today = getDateOnly(jstTime)
+    const today = getDateOnly(getCurrentJSTDate())
     return {
       isComplete: false,
       OR: [
@@ -50,9 +54,7 @@ export function createTodoFilterCondition(
   }
 
   if (filterType === TODO_TABS_VALUES.OVERDUE) {
-    const now = new Date()
-    const jstTime = toZonedTime(now, 'Asia/Tokyo')
-    const today = getDateOnly(jstTime)
+    const today = getDateOnly(getCurrentJSTDate())
     return {
       isComplete: false,
       dueDate: {
